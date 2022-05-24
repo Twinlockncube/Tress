@@ -1,0 +1,463 @@
+@extends('layouts.frame')
+
+@section('content')
+<div id="resultPane-less">
+
+        <div id="resultLinks">
+          <table class="table table-bordered cla_les-datatable table-sm table-striped">
+                    <thead>
+                      <tr>
+                        <th>No</th>
+                        <th>Class</th>
+                        <th>Lesson</th>
+                        <th>Lesson_Title</th>
+                        <th>Week_Ending</th>
+                        <th>Subject</th>
+                        <th>Created_by</th>
+                        <th>Updated_by</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+            </table>
+          </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade"  id="GuardModal" tabindex="-1" role="dialog" aria-labelledby="GuardModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle">Guardians/Parents</h5>
+        <button type="button" class="close btn-sm form-control-sm mb-2" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered guard-datatable table-sm table-striped" width="80%">
+                  <thead>
+                      <tr>
+                        <th>No</th>
+                        <th>Class</th>
+                        <th>Lesson</th>
+                        <th>Lesson Title</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+          </table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm form-control-sm mb-2" data-dismiss="modal">Close</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End of Popup-->
+
+<div class="container" id="container">
+    <div class="row justify-content-end">
+        <div class="col-md-7">
+            <div class="card">
+                <div class="card-header">{{ __('Class Lesson') }}
+
+                </div>
+
+                <div class="card-body">
+                    <div class="tab-content">
+                      <div id="general" class="container tab-pane active">
+                        <form id="reg_form">
+                            @csrf
+
+                            <div class="form-group row">
+                                <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Class') }}</label>
+
+                                <div class="col-md-6">
+                                    <input id="class_id" type="text" class="form-control form-control-sm input-sm @error('class_id') is-invalid @enderror" name="class_id" value="{{ old('class_id') }}" required autocomplete="class_id" autofocus>
+
+                                    @error('class_id')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Lesson Id') }}</label>
+
+                                <div class="col-md-6">
+                                    <input id="lesson_id" type="text" class="form-control form-control-sm input-sm @error('lesson_id') is-invalid @enderror" name="lesson_id" value="{{ old('lesson_id') }}" required autocomplete="lesson_id" autofocus>
+
+                                    @error('lesson_id')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="date" class="col-md-4 col-form-label text-md-right">{{ __('Lesson Title') }}</label>
+
+                                <div class="col-md-6">
+                                    <input id="lesson_title" type="text" class="form-control form-control-sm input-sm @error('lesson_title') is-invalid @enderror" name="lesson_title" value="{{ old('lesson_title') }}" required autocomplete="lesson_title" autofocus>
+
+                                    @error('lesson_title')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="subject" class="col-md-4 col-form-label text-md-right">{{ __('Subject') }}</label>
+
+                                <div class="col-md-6">
+                                    <input id="subject" type="text" class="form-control form-control-sm input-sm @error('subject') is-invalid @enderror" name="subject" value="{{ old('subject') }}" required autocomplete="subject" autofocus>
+
+                                    @error('subject')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="start_date" class="col-md-4 col-form-label text-md-right">{{ __('Start Date') }}</label>
+
+                                <div class="col-md-6">
+                                    <input id="start_date" type="date" class="form-control form-control-sm input-sm @error('start_date') is-invalid @enderror" name="start_date" value="{{ old('start_date') }}" required autocomplete="start_date" autofocus>
+
+                                    @error('start_date')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="end_date" class="col-md-4 col-form-label text-md-right">{{ __('End Date') }}</label>
+
+                                <div class="col-md-6">
+                                    <input id="end_date" type="date" class="form-control form-control-sm input-sm @error('end_date') is-invalid @enderror" name="end_date" value="{{ old('end_date') }}" required autocomplete="end_date" autofocus>
+
+                                    @error('end_date')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="completed" class="col-md-4 col-form-label text-md-right">{{ __('Completed') }}</label>
+
+                                <div class="col-md-6">
+                                    <input id="completed" type="checkbox" class=" form-control-sm input-sm @error('completed') is-invalid @enderror" name="completed" value="{{ old('completed') }}" required autocomplete="completed" autofocus>
+
+                                    @error('completed')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="evaluation" class="col-md-4 col-form-label text-md-right">{{ __('Evaluation') }}</label>
+
+                                <div class="col-md-6">
+                                    <textarea rows="3" cols="8" id="aim"  class="form-control form-control-sm input-sm @error('aim') is-invalid @enderror" name="evaluation" value="{{ old('evaluation') }}" required autocomplete="evaluation" autofocus>
+                                    </textarea>
+                                    @error('evaluation')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row mb-0">
+                                <div class="col-md-6 offset-md-4">
+                                    <button type="submit" class="btn btn-dark btn-inline btn-sm" id="submit" disabled="true">
+                                        {{ __('Submit') }}
+                                    </button>&nbsp;&nbsp;&nbsp;
+                                    <button  class="btn btn-secondary btn-inline btn-sm" id="edit">
+                                        {{ __('Edit') }}
+                                    </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <button class="btn btn-primary btn-inline btn-sm" id="new">
+                                        {{ __('New') }}
+                                    </button>
+                                    <!--<label  class="col-md-4 col-form-label text-md-right">{{ __('Processing . . .') }}</label>-->
+                                </div>
+
+                            </div>
+
+                        </form>
+                      </div>
+
+                    </div>
+
+
+                    <script>
+                    var new_entry = false;
+                    var tableGuard;
+                    var tableObj
+                    function reg_class_lesson(){
+                      $.ajax({
+                          type:'post',
+                          url:"{{route('reg_class_lesson')}}",
+                          data:$('form').serialize(),
+                          success: function(response){
+                            $('.cla_les-datatable').DataTable().ajax.reload();
+                            swal('Tress','Lesson Registered Successfully','success');
+                          },
+                          error: function(resp){
+                            swal('Tress',resp.msg,'error');
+                          }
+                      });
+                    }
+
+                    function adjust(){
+                      tableGuard.columns.adjust().draw();
+                    }
+
+                    function selectGuard(event){
+                      event.preventDefault();
+                      var id = $(event.target).text();
+                      $('#guardian').val(id);
+                      return false;
+                    }
+
+                    function updateStudent(){
+                      $.ajax({
+                          type:'post',
+                          url:"/update_student",
+                          data:$('form').serialize(),
+                          success: function(response){
+                            $('.yajra-datatable').DataTable().ajax.reload();
+                            swal('Tress','Student Edited Successfully','success');
+                          },
+                          error: function(resp){
+                            swal('Tress',resp.msg,'error');
+                          }
+                      });
+                    }
+
+                    function deleteLine(event){
+                      event.preventDefault();
+                      if($(event.target).closest('tbody').children().length==1){
+                        var num =0;
+                        $(event.target).closest('tr').children().each(function(){
+                          if($(this).children().length==0){
+                            if(num==0){
+                              num++;
+                            }
+                            else {
+                              $(this).html("");
+                            }
+                          }
+                        });
+                      }
+                      else{
+                        var curr_element = $(event.target);
+                        var line_num = parseInt(curr_element.closest('tr').children().eq(0).html());
+                        $.each(curr_element.closest('tbody').children(),function(){
+                            var this_line = parseInt($(this).children().eq(0).html());
+                            if(this_line>line_num){
+                              $(this).children().eq(0).html(--this_line);
+                            }
+                        });
+                        curr_element.closest('tr').remove();
+                        //alert($('.obj-datatable > tbody > tr').after(curr_element).length);
+                      }
+
+                      return false;
+                    }
+
+                    function showLesson(event){
+                      event.preventDefault();
+                      //var id = $(event.target).parent().siblings(":first").next().html();
+                      //var id = $(event.target).parent().siblings(":first").nextAll().eq(1).html();
+                      var id = $(event.target).text();
+                      $.ajax({
+                          type:'get',
+                          url:"{{route('lesson.show')}}",
+                          data:{id:id},
+                          success: function(response){
+                            response = response[0];
+                            var activities = response.activities;
+                            var objectives = response.objectives;
+                            //console.log(objectives);
+                            $('#title').val(response.title);
+                            $('#subject').val(response.subject_id);
+                            $('#lesson_id').val(response.id);
+                            $('#date').val(response.date_conducted);
+                            $('#start').val(response.start_time);
+                            $('#end').val(response.end_time);
+                            $('#aim').val(response.aim);
+                            $('#evaluation').val(response.evaluation);
+
+                            /********Writing Objectives*****************/
+                            var obj_num = objectives.length;
+                            var curr_obj_rows = $('.obj-datatable > tbody').children().length;
+                            var add_row_num = obj_num - curr_obj_rows;
+                            if(add_row_num > 0){
+                              for(var i=0;i<add_row_num;i++){
+                                var obj_line =  '<tr><td>'+(++curr_obj_rows)+'</td><td contenteditable="true">&nbsp;&nbsp;&nbsp;</td>' +'<td><button class="btn btn-outline-danger" onClick="deleteLine(event)">'
+                                        +        ' <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">'
+                                        +        '<path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>'
+                                          +       ' <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>'
+                                                +  '</svg>'
+                                                  +'</button></td>'
+                                  +'</tr>';
+                                  var lastTr = $('tr:last',$('.obj-datatable'));
+                                  lastTr.after(obj_line);
+                              }
+                            }
+
+                            var obj_index = 0;
+                            $.each($('.obj-datatable tbody').children(),function(){
+                              var cols = $(this).children();
+                              cols.eq(1).html(objectives[obj_index++].description);
+                            });
+
+                            /********End  Objectives*****************/
+
+                            /********Writing Activities*****************/
+                            var act_num = activities.length;
+                            var curr_act_rows = $('.act-datatable > tbody').children().length;
+                            var add_row_num1 = act_num - curr_act_rows;
+                            if(add_row_num1 > 0){
+                              for(var i=0;i<add_row_num1;i++){
+                                var act_line =  '<tr><td>'+(++curr_obj_rows)+'</td><td contenteditable="true">&nbsp;&nbsp;&nbsp;</td>' +'<td><button class="btn btn-outline-danger" onClick="deleteLine(event)">'
+                                        +        ' <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">'
+                                        +        '<path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>'
+                                          +       ' <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>'
+                                                +  '</svg>'
+                                                  +'</button></td>'
+                                  +'</tr>';
+                                  var last_act_Tr = $('tr:last',$('.obj-datatable'));
+                                  last_act_Tr.after(act_line);
+                              }
+                            }
+
+                            var act_index = 0;
+                            $.each($('.act-datatable tbody').children(),function(){
+                              var act_cols = $(this).children();
+                              act_cols.eq(1).html(activities[act_index++].description);
+                            });
+
+
+                            $('#reg_form input').attr("readonly",true);
+                            $('#submit').attr("disabled",true);
+                          },
+                          error: function(resp){
+                            alert(resp.msg);
+                          }
+                      });
+                      return false;
+                    }
+
+                    $(document).ready(function(){
+
+                        $('#submit').click(function(event){
+                            event.preventDefault();
+                            if(new_entry){
+                              reg_class_lesson();
+                            }
+                            else{
+                              updateStudent();
+                            }
+                            $('#submit').attr("disabled",true);
+                        });
+
+                        $('#edit').click(function(event){
+                            event.preventDefault();
+                            new_entry = false;
+                            $('#reg_form input').not('#sid').attr("readonly",false);
+
+                        });
+
+                        $('#new').click(function(event){
+                            event.preventDefault();
+                            new_entry = true;
+                            $('#reg_form input').attr("readonly",false);
+                            $('#reg_form')[0].reset();
+                            $('#last_name').focus();
+                            $('#submit').attr("disabled",false);
+                            $('.obj-datatable > tbody > tr,.act-datatable > tbody > tr').not('.obj-datatable > tbody > tr:first,.act-datatable > tbody > tr:first').remove();
+                            var first_obj = $('.obj-datatable > tbody > tr').children();
+                            first_obj.eq(1).html("");
+                            var first_act = $('.act-datatable > tbody > tr').children();
+                            first_act.eq(1).html("");
+                        });
+
+                        $('#reg_form input').change(function(){
+                            $('#submit').attr("disabled",false);
+                        });
+
+                        $(function () {
+                         var table = $('.cla_les-datatable').DataTable({
+                             processing: true,
+                             serverSide: true,
+                             ajax: "{{ route('class_lesson.list') }}",
+                             columns: [
+                                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                                 {data: 'class_group_id', name: 'class_group_id'},
+                                 {data: function(row){
+                                   return '<a href="#" onClick="showClass_Lesson(event)" style="color:black">'+row.lesson_id+'</a>';
+                                 }, name: 'lesson_id'},
+                                 {data: 'lesson.title', name: 'lesson.title'},
+                                 {data: 'end_date', name: 'end_date'},
+                                 {data: 'lesson.subject_id', name: 'lesson.subject_id'},
+                                 {data: 'creator', name: 'created_by'},
+                                 {data: 'updater', name: 'updated_by'},
+                                 {
+                                     data: 'action',
+                                     name: 'action',
+                                     orderable: true,
+                                     searchable: true
+                                 },
+                             ]
+                         });
+
+                       });
+
+                       $(function () {
+
+                            tableGuard = $('.guard-datatable').DataTable({
+                            processing: true,
+                            serverSide: true,
+                            scrollY:        "150px",
+                            scrollX:        true,
+                            scrollCollapse: true,
+                            paging:         false,
+                            ajax: "{{ route('guardians/list') }}",
+                            columns: [
+                                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                                {data: function(row){
+                                  return '<a href="#" onClick="selectGuard(event)" data-dismiss="modal" style="color:black">'+row.id+'</a>';
+                                }, name: 'id'},
+                                {data: 'last_name', name: 'last_name'},
+                                {data: 'name', name: 'name'},
+
+                            ]
+                        });
+
+                      });
+                    });
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

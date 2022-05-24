@@ -1,0 +1,75 @@
+/*This is a Style for marks.html*/
+
+#wrapper{
+        height:460px;
+		overflow:scroll;
+		width:710px;
+		/*background-color:#99FF33;*/ 
+		       
+       }
+
+#submit{
+        background-color:#FF0000;        
+       }
+	   
+label {font:Geneva, Arial, Helvetica, sans-serif;
+      }
+	  
+	   
+#headerr{
+        background-color:#0099CC;
+		}
+		
+#header{
+        position:absolute;
+}
+#bkssubmit{
+        position:absolute;
+        right:0px;
+        background-color:#FF0000; 
+
+          }
+#welcome {color:#990000;
+         }
+		  
+#tabletop{width:710px;
+}
+
+#tablemarks{width:710px;
+}
+#tablelist{width:710px;
+}
+		 	 
+#borrow {color:#666666;
+        }  
+#return {color:#666666;
+        }  
+#returned {background-color:#CCCCCC;
+           width:850px;
+		   margin-left:0px;
+		   margin-right:auto;
+		   height:250px;
+		   padding:2px;
+        }
+#inputs{ width:500px;
+         float:left;
+         background-color:#FFFFFF;
+		 padding:10px;
+		 height:170px;
+        }   
+#outputs{width:300px;
+         float:right;
+         background-color:#000000;
+		 padding:10px;
+		 height:170px;
+		 color:#FFFFFF;
+        }    
+#rsubmit{background-color:#FF0000;        
+        } 
+.detail{color:#006633;
+        }       
+#content{display:table;
+}
+#pupils{width:710;
+        top:100px;
+}

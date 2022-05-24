@@ -1,0 +1,23 @@
+#header{background-color:990000;
+        color:#FFFFFF;
+       }
+#headerr{background-color:990000;
+         height:auto;
+		 width:946px;
+		 padding:5px;
+		 border-radius:6px 6px 0px 0px;
+       }
+.submit_button{background-color:#FF0000;
+              }
+#nexton{width:945px;
+		height:420px;
+		background-color:FFFFFF;
+       }
+#line{top:550px;
+      color:990000;
+}
+.remove_field{background-color:#0000FF;
+              color:#FF0000;
+}
+#add_field_button{background-color:#FF0000;
+}
