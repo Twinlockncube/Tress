@@ -76,6 +76,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('class_lesson/index', [App\Http\Controllers\ClassLessonController::class, 'index'])->name('class_lesson.index');
     Route::get('class_lesson/list', [App\Http\Controllers\ClassLessonController::class, 'showClassLesson'])->name('class_lesson.list');
     Route::post('class_lesson/create', [App\Http\Controllers\ClassLessonController::class, 'create'])->name('reg_class_lesson');
+    Route::get('class_lesson/show', [App\Http\Controllers\ClassLessonController::class, 'show'])->name('class_lesson.show');
     //Attendance Routes
     Route::get('attendance/create', [App\Http\Controllers\AttendanceController::class, 'index'])->name('attendance.create');
     Route::get('attendance/list/{group?}/{code?}', [App\Http\Controllers\AttendanceController::class, 'getAttendances'])->name('attendance.list');

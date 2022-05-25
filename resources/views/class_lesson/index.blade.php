@@ -282,80 +282,30 @@
                       return false;
                     }
 
-                    function showLesson(event){
+                    function showClass_Lesson(event){
                       event.preventDefault();
                       //var id = $(event.target).parent().siblings(":first").next().html();
                       //var id = $(event.target).parent().siblings(":first").nextAll().eq(1).html();
                       var id = $(event.target).text();
                       $.ajax({
                           type:'get',
-                          url:"{{route('lesson.show')}}",
+                          url:"{{route('class_lesson.show')}}",
                           data:{id:id},
                           success: function(response){
-                            response = response[0];
-                            var activities = response.activities;
-                            var objectives = response.objectives;
-                            //console.log(objectives);
-                            $('#title').val(response.title);
-                            $('#subject').val(response.subject_id);
-                            $('#lesson_id').val(response.id);
-                            $('#date').val(response.date_conducted);
-                            $('#start').val(response.start_time);
-                            $('#end').val(response.end_time);
-                            $('#aim').val(response.aim);
+                            $('#class_id').val(response.class_group_id);
+                            $('#lesson_id').val(response.lesson_id);
+                            $('#lesson_title').val(response.lesson.title);
+                            $('#subject').val(response.lesson.subject.name);
+                            $('#start_date').val(response.start_date);
+                            $('#end_date').val(response.end_date);
+                            if(response.completed===0){
+                              $('#completed').attr("checked",true);
+                              $('#completed').attr("disabled","disabled");
+                            }
+                            else{
+                              $('#completed').attr("checked",false);
+                            }
                             $('#evaluation').val(response.evaluation);
-
-                            /********Writing Objectives*****************/
-                            var obj_num = objectives.length;
-                            var curr_obj_rows = $('.obj-datatable > tbody').children().length;
-                            var add_row_num = obj_num - curr_obj_rows;
-                            if(add_row_num > 0){
-                              for(var i=0;i<add_row_num;i++){
-                                var obj_line =  '<tr><td>'+(++curr_obj_rows)+'</td><td contenteditable="true">&nbsp;&nbsp;&nbsp;</td>' +'<td><button class="btn btn-outline-danger" onClick="deleteLine(event)">'
-                                        +        ' <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">'
-                                        +        '<path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>'
-                                          +       ' <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>'
-                                                +  '</svg>'
-                                                  +'</button></td>'
-                                  +'</tr>';
-                                  var lastTr = $('tr:last',$('.obj-datatable'));
-                                  lastTr.after(obj_line);
-                              }
-                            }
-
-                            var obj_index = 0;
-                            $.each($('.obj-datatable tbody').children(),function(){
-                              var cols = $(this).children();
-                              cols.eq(1).html(objectives[obj_index++].description);
-                            });
-
-                            /********End  Objectives*****************/
-
-                            /********Writing Activities*****************/
-                            var act_num = activities.length;
-                            var curr_act_rows = $('.act-datatable > tbody').children().length;
-                            var add_row_num1 = act_num - curr_act_rows;
-                            if(add_row_num1 > 0){
-                              for(var i=0;i<add_row_num1;i++){
-                                var act_line =  '<tr><td>'+(++curr_obj_rows)+'</td><td contenteditable="true">&nbsp;&nbsp;&nbsp;</td>' +'<td><button class="btn btn-outline-danger" onClick="deleteLine(event)">'
-                                        +        ' <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">'
-                                        +        '<path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>'
-                                          +       ' <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>'
-                                                +  '</svg>'
-                                                  +'</button></td>'
-                                  +'</tr>';
-                                  var last_act_Tr = $('tr:last',$('.obj-datatable'));
-                                  last_act_Tr.after(act_line);
-                              }
-                            }
-
-                            var act_index = 0;
-                            $.each($('.act-datatable tbody').children(),function(){
-                              var act_cols = $(this).children();
-                              act_cols.eq(1).html(activities[act_index++].description);
-                            });
-
-
                             $('#reg_form input').attr("readonly",true);
                             $('#submit').attr("disabled",true);
                           },

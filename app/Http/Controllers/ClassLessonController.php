@@ -62,4 +62,12 @@ class ClassLessonController extends Controller
    }
 
  }
+
+ public function show(Request $request){
+   $id = $request->input('id');
+   $class_lesson = ClassLesson::where('lesson_id','=',$id)->with(['lesson'=>function($query){
+     $query->with('subject');
+   }])->first();
+   return response()->json($class_lesson);
+ }
 }
