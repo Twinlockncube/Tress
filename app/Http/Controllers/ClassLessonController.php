@@ -70,4 +70,20 @@ class ClassLessonController extends Controller
    }])->first();
    return response()->json($class_lesson);
  }
+
+ public function update(Request $request){
+   $completed = ($request->input('completed')===null)?0:1;
+   $class_id = $request->input('class_id');
+   $lesson_id = $request->input('lesson_id');
+   $class_lesson = ClassLesson::where(
+                                      ['class_group_id'=>$class_id,
+                                      'lesson_id'=>$lesson_id])->first();
+   $class_lesson->update([
+     'mom'=>$request->input('start_date'),
+     'end_date'=>$request->input('end_date'),
+     'completed'=>$completed,
+     'evaluation'=>$request->input('evaluation')
+   ]);
+   return response()->json(['msg'=>"Class Lesson Saved Successfully"]);
+ }
 }

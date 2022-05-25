@@ -14,6 +14,7 @@ class ClassLesson extends Model
         'start_date',
         'end_date',
         'completed',
+        'evaluation',
         'creator',
         'updater',
         'created_at',

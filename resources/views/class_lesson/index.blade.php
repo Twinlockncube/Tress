@@ -160,7 +160,7 @@
                                 <label for="completed" class="col-md-4 col-form-label text-md-right">{{ __('Completed') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="completed" type="checkbox" class=" form-control-sm input-sm @error('completed') is-invalid @enderror" name="completed" value="{{ old('completed') }}" required autocomplete="completed" autofocus>
+                                    <input id="completed" type="checkbox" class=" form-control-sm input-sm @error('completed') is-invalid @enderror" name="completed" value="1" required autocomplete="completed" autofocus>
 
                                     @error('completed')
                                         <span class="invalid-feedback" role="alert">
@@ -174,7 +174,7 @@
                                 <label for="evaluation" class="col-md-4 col-form-label text-md-right">{{ __('Evaluation') }}</label>
 
                                 <div class="col-md-6">
-                                    <textarea rows="3" cols="8" id="aim"  class="form-control form-control-sm input-sm @error('aim') is-invalid @enderror" name="evaluation" value="{{ old('evaluation') }}" required autocomplete="evaluation" autofocus>
+                                    <textarea rows="3" cols="8" id="evaluation"  class="form-control form-control-sm input-sm @error('aim') is-invalid @enderror" name="evaluation" value="{{ old('evaluation') }}" required autocomplete="evaluation" autofocus>
                                     </textarea>
                                     @error('evaluation')
                                         <span class="invalid-feedback" role="alert">
@@ -236,14 +236,14 @@
                       return false;
                     }
 
-                    function updateStudent(){
+                    function updateClassLesson(){
                       $.ajax({
                           type:'post',
-                          url:"/update_student",
+                          url:"{{route('update_class_lesson')}}",
                           data:$('form').serialize(),
                           success: function(response){
-                            $('.yajra-datatable').DataTable().ajax.reload();
-                            swal('Tress','Student Edited Successfully','success');
+                            $('.cla_les-datatable').DataTable().ajax.reload();
+                            swal('Tress',response.msg,'success');
                           },
                           error: function(resp){
                             swal('Tress',resp.msg,'error');
@@ -284,8 +284,6 @@
 
                     function showClass_Lesson(event){
                       event.preventDefault();
-                      //var id = $(event.target).parent().siblings(":first").next().html();
-                      //var id = $(event.target).parent().siblings(":first").nextAll().eq(1).html();
                       var id = $(event.target).text();
                       $.ajax({
                           type:'get',
@@ -324,12 +322,14 @@
                               reg_class_lesson();
                             }
                             else{
-                              updateStudent();
+                              updateClassLesson();
                             }
                             $('#submit').attr("disabled",true);
                         });
 
                         $('#edit').click(function(event){
+                            $('#submit').attr("disabled",false);
+                            $('#completed').attr("disabled",false);
                             event.preventDefault();
                             new_entry = false;
                             $('#reg_form input').not('#sid').attr("readonly",false);
