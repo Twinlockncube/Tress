@@ -86,4 +86,16 @@ class ClassLessonController extends Controller
    ]);
    return response()->json(['msg'=>"Class Lesson Saved Successfully"]);
  }
+
+ public function delete(Request $request){
+     $class_id = $request->input('class_id');
+     $lesson_id = $request->input('lesson_id');
+     $class_lesson = ClassLesson::where([
+                                        'class_group_id'=>$class_id,
+                                        'lesson_id'=>$lesson_id
+                                        ])->first();
+     $class_lesson->delete();
+     return response()->json(array('msg'=>"Class Lesson Deleted Successfully"));
+   }
+
 }

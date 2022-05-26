@@ -263,6 +263,41 @@
                       });
                     }
 
+                    function deleteLesson(event){
+                      event.preventDefault();
+                      var id = $(event.target).closest('tr').children(":first").next().text();
+                      swal({
+                            title: "Are you sure?",
+                            text: "Once deleted, you will not be able to recover the record",
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true,
+                          })
+                          .then((willDelete) => {
+                            if (willDelete) {
+                              $.ajax({
+                                type: 'get',
+                                url: "{{route('delete_lesson')}}",
+                                data:{id:id},
+                                success: function(response){
+                                  $('.lesson-datatable').DataTable().ajax.reload();
+                                  swal('Tress',response.msg,'success');
+                                },
+                                error: function(response){
+                                  if(response.status == 403){
+                                    swal('Tress',"Error: "+403+ ". Check permissions ",'alert');
+                                  }
+                                  else{
+                                    alert("Unspecified Error!");
+                                  }
+                                }
+                              });
+                            }
+                          });
+
+                      return false;
+                    }
+
                     function deleteLine(event){
                       event.preventDefault();
                       if($(event.target).closest('tbody').children().length==1){

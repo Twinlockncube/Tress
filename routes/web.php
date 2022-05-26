@@ -71,6 +71,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('lesson/view', [App\Http\Controllers\LessonController::class, 'viewLesson'])->name('lesson.view');
     Route::get('lesson/show', [App\Http\Controllers\LessonController::class, 'showLesson'])->name('lesson.show');
     Route::post('lesson/reg_lesson', [App\Http\Controllers\LessonController::class, 'create'])->name('reg_lesson');
+    Route::get('lesson/delete_lesson', [App\Http\Controllers\LessonController::class, 'delete'])->name('delete_lesson');
 
     //Class_Lesson Routes
     Route::get('class_lesson/index', [App\Http\Controllers\ClassLessonController::class, 'index'])->name('class_lesson.index');
@@ -78,6 +79,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('class_lesson/create', [App\Http\Controllers\ClassLessonController::class, 'create'])->name('reg_class_lesson');
     Route::get('class_lesson/show', [App\Http\Controllers\ClassLessonController::class, 'show'])->name('class_lesson.show');
     Route::post('class_lesson/update', [App\Http\Controllers\ClassLessonController::class, 'update'])->name('update_class_lesson');
+    Route::get('delete_class_lesson', [App\Http\Controllers\ClassLessonController::class, 'delete'])->name('delete_class_lesson');
     //Attendance Routes
     Route::get('attendance/create', [App\Http\Controllers\AttendanceController::class, 'index'])->name('attendance.create');
     Route::get('attendance/list/{group?}/{code?}', [App\Http\Controllers\AttendanceController::class, 'getAttendances'])->name('attendance.list');

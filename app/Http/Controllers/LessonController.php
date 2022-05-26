@@ -119,4 +119,11 @@ class LessonController extends Controller
 
         return response()->json($lesson);
     }
+
+    public function delete(Request $request){
+        $id = $request->input('id');
+        $lesson = Lesson::where('id','=',$id)->first();
+        $lesson->delete();
+        return response()->json(array('msg'=>"Class Lesson Deleted Successfully"));
+      }
 }

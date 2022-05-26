@@ -13,6 +13,7 @@
                         <th>Lesson_Title</th>
                         <th>Week_Ending</th>
                         <th>Subject</th>
+                        <th>Completed</th>
                         <th>Created_by</th>
                         <th>Updated_by</th>
                         <th>Action</th>
@@ -251,6 +252,43 @@
                       });
                     }
 
+                    function deleteClassLesson(event){
+                      event.preventDefault();
+                      let class_html = $(event.target).closest('tr').children(":first").next();
+                      let class_id = class_html.text();
+                      let lesson_id = class_html.next().text();
+                      swal({
+                            title: "Are you sure?",
+                            text: "Once deleted, you will not be able to recover the record",
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true,
+                          })
+                          .then((willDelete) => {
+                            if (willDelete) {
+                              $.ajax({
+                                type: 'get',
+                                url: "{{route('delete_class_lesson')}}",
+                                data:{class_id:class_id,lesson_id:lesson_id},
+                                success: function(response){
+                                  $('.cla_les-datatable').DataTable().ajax.reload();
+                                  swal('Tress',response.msg,'success');
+                                },
+                                error: function(response){
+                                  if(response.status == 403){
+                                    swal('Tress',"Error: "+403+ ". Check permissions ",'alert');
+                                  }
+                                  else{
+                                    alert("Unspecified Error!");
+                                  }
+                                }
+                              });
+                            }
+                          });
+
+                      return false;
+                    }
+
                     function deleteLine(event){
                       event.preventDefault();
                       if($(event.target).closest('tbody').children().length==1){
@@ -276,7 +314,7 @@
                             }
                         });
                         curr_element.closest('tr').remove();
-                        //alert($('.obj-datatable > tbody > tr').after(curr_element).length);
+
                       }
 
                       return false;
@@ -304,7 +342,7 @@
                               $('#completed').attr("checked",false);
                             }
                             $('#evaluation').val(response.evaluation);
-                            $('#reg_form input').attr("readonly",true);
+                            $('#reg_form input,#reg_form textarea').attr("readonly",true);
                             $('#submit').attr("disabled",true);
                           },
                           error: function(resp){
@@ -315,6 +353,7 @@
                     }
 
                     $(document).ready(function(){
+                      $('#reg_form input,#reg_form textarea').attr("readonly",true);
 
                         $('#submit').click(function(event){
                             event.preventDefault();
@@ -328,6 +367,7 @@
                         });
 
                         $('#edit').click(function(event){
+                            $('#reg_form input,#reg_form textarea').attr("readonly",false);
                             $('#submit').attr("disabled",false);
                             $('#completed').attr("disabled",false);
                             event.preventDefault();
@@ -339,7 +379,7 @@
                         $('#new').click(function(event){
                             event.preventDefault();
                             new_entry = true;
-                            $('#reg_form input').attr("readonly",false);
+                            $('#reg_form input,#reg_form textarea').attr("readonly",false);
                             $('#reg_form')[0].reset();
                             $('#last_name').focus();
                             $('#submit').attr("disabled",false);
@@ -368,6 +408,10 @@
                                  {data: 'lesson.title', name: 'lesson.title'},
                                  {data: 'end_date', name: 'end_date'},
                                  {data: 'lesson.subject_id', name: 'lesson.subject_id'},
+                                 {data: function(row){
+                                   let status = (row.completed===0)?"No":"Yes";
+                                   return status;
+                                 }, name: 'completed'},
                                  {data: 'creator', name: 'created_by'},
                                  {data: 'updater', name: 'updated_by'},
                                  {
