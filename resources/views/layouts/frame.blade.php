@@ -97,7 +97,7 @@ function MM_validateForm() { //v4.0
                                  </form>
                  </div>
                 <div id="globalNav"> <img alt="" src="{{ asset('/assets/images/gblnav_left.gif') }}" height="32" width="4" id="gnl" /> <img alt="" src="{{ asset('/assets/images/glbnav_right.gif') }}" height="32" width="4" id="gnr" />
-                  <div id="globalLink"> <a href="" id="gl1" class="glink" onmouseover="ehandler(event,menuitem1);">Home</a><a href="#" id="gl2" class="glink" onmouseover="ehandler(event,menuitem2);">Banking</a><a href="#" id="gl3" class="glink" onmouseover="ehandler(event,menuitem3);">Accounts</a><a href="#" id="gl4" class="glink" onmouseover="ehandler(event,menuitem4);">Student </a><a href="#" id="gl5" class="glink" onmouseover="ehandler(event,menuitem5);">Books</a><a href="#" id="gl6" class="glink" onmouseover="ehandler(event,menuitem6);">Lesson</a><a href="#" id="gl7" class="glink" onmouseover="ehandler(event,menuitem7);">Schemes</a> </div>
+                  <div id="globalLink"> <a href="" id="gl1" class="glink" onmouseover="ehandler(event,menuitem1);">Home</a><a href="#" id="gl2" class="glink" onmouseover="ehandler(event,menuitem2);">Partners</a><a href="#" id="gl3" class="glink" onmouseover="ehandler(event,menuitem3);">Accounts</a><a href="#" id="gl4" class="glink" onmouseover="ehandler(event,menuitem4);">Student </a><a href="#" id="gl5" class="glink" onmouseover="ehandler(event,menuitem5);">Books</a><a href="#" id="gl6" class="glink" onmouseover="ehandler(event,menuitem6);">Lesson</a><a href="#" id="gl7" class="glink" onmouseover="ehandler(event,menuitem7);">Schemes</a> </div>
                   <!--end globalLinks-->
               	<form id="search" action="">
                     <input name="searchFor" type="text" onblur="MM_validateForm('searchFor','','R');return document.MM_returnValue" size="10" />
@@ -106,11 +106,11 @@ function MM_validateForm() { //v4.0
                 </div>
                 <!-- end globalNav -->
                 <div id="subglobal1" class="subglobalNav"> <a href="{{route('home')}}">home</a></div>
-                <div id="subglobal2" class="subglobalNav"> <a href="#">subglobal2 link</a> | <a href="#">subglobal2 link</a> | <a href="#">subglobal2 link</a> | <a href="#">subglobal2 link</a> | <a href="#">subglobal2 link</a> | <a href="#">subglobal2 link</a> | <a href="#">subglobal2 link</a> </div>
-                <div id="subglobal3" class="subglobalNav"> <a href="#">Debtors</a> | <a href="#">Creditors</a> | <a href="#">Balance Sheet</a> | <a href="#">Statements</a> </div>
+                <div id="subglobal2" class="subglobalNav"> <a href="#">Sponsors</a> | <a href="#">subglobal2 link</a> | <a href="#">subglobal2 link</a> | <a href="#">subglobal2 link</a> | <a href="#">subglobal2 link</a> | <a href="#">subglobal2 link</a> | <a href="#">subglobal2 link</a> </div>
+                <div id="subglobal3" class="subglobalNav"> <a href="#">Payments</a> | <a href="#">Creditors</a> | <a href="#">Balance Sheet</a> | <a href="#">Statements</a> </div>
                 <div id="subglobal4" class="subglobalNav"> <a href="{{ route('regist') }}">Profile</a> | <a href="{{route('guardian')}}">Guardian</a> | <a href="#">Register</a> | <a href="{{route('assessment.capture')}}">Assessment</a> | <a href="{{route('result.capture')}}">Result</a> | <a href="{{route('attendance.create')}}">Attendance</a> | <a href="#">Discipline</a> </div>
                 <div id="subglobal5" class="subglobalNav"> <a href="#">Obj</a> | <a href="#">Form2</a> | <a href="#">Form3</a> | <a href="#">Form4</a> | <a href="#">Form5</a> | <a href="#">Form6</a> </div>
-              	  <div id="subglobal6" class="subglobalNav"> <a href="{{ route('lesson.index') }}">Plan</a> | <a href="{{route('class_lesson.index')}}">Classes</a> | <a href="#">XXXX</a> | <a href="#">Form4</a> | <a href="#">Form5</a> | <a href="#">Form6</a> </div>
+              	  <div id="subglobal6" class="subglobalNav"> <a href="{{ route('lesson.index') }}">Plan</a> | <a href="{{route('class_lesson.index')}}">Classes</a> </div>
                 <div id="subglobal7" class="subglobalNav"> <a href="#">subglobal7 link</a> | <a href="#">subglobal7 link</a> | <a href="#">subglobal7 link</a> | <a href="#">Form1</a> | <a href="#">Form2</a> | <a href="#">Form3</a> | <a href="#">Form4</a> </div>
                 <div id="subglobal8" class="subglobalNav"> <a href="#">subglobal8 link</a> | <a href="#">subglobal8 link</a> | <a href="#">subglobal8 link</a> | <a href="#">subglobal8 link</a> | <a href="#">subglobal8 link</a> | <a href="#">subglobal8 link</a> | <a href="#">subglobal8 link</a> </div>
               </div>

@@ -38,6 +38,12 @@ class Student extends Model
       return $this->belongsTo(ClassGroup::class);
     }
 
+    public function sponsor()
+    {
+      return $this->belongsTo(Sponsor::class);
+    }
+
+
     public function subjects(){
       return $this->hasMany(Subject::class);
     }
