@@ -107,7 +107,7 @@ function MM_validateForm() { //v4.0
                 <!-- end globalNav -->
                 <div id="subglobal1" class="subglobalNav"> <a href="{{route('home')}}">home</a></div>
                 <div id="subglobal2" class="subglobalNav"> <a href="#">Sponsors</a> | <a href="#">subglobal2 link</a> | <a href="#">subglobal2 link</a> | <a href="#">subglobal2 link</a> | <a href="#">subglobal2 link</a> | <a href="#">subglobal2 link</a> | <a href="#">subglobal2 link</a> </div>
-                <div id="subglobal3" class="subglobalNav"> <a href="#">Payments</a> | <a href="#">Creditors</a> | <a href="#">Balance Sheet</a> | <a href="#">Statements</a> </div>
+                <div id="subglobal3" class="subglobalNav"> <a href="{{route('payment.index')}}">Payments</a> | <a href="#">Creditors</a> | <a href="#">Balance Sheet</a> | <a href="#">Statements</a> </div>
                 <div id="subglobal4" class="subglobalNav"> <a href="{{ route('regist') }}">Profile</a> | <a href="{{route('guardian')}}">Guardian</a> | <a href="#">Register</a> | <a href="{{route('assessment.capture')}}">Assessment</a> | <a href="{{route('result.capture')}}">Result</a> | <a href="{{route('attendance.create')}}">Attendance</a> | <a href="#">Discipline</a> </div>
                 <div id="subglobal5" class="subglobalNav"> <a href="#">Obj</a> | <a href="#">Form2</a> | <a href="#">Form3</a> | <a href="#">Form4</a> | <a href="#">Form5</a> | <a href="#">Form6</a> </div>
               	  <div id="subglobal6" class="subglobalNav"> <a href="{{ route('lesson.index') }}">Plan</a> | <a href="{{route('class_lesson.index')}}">Classes</a> </div>

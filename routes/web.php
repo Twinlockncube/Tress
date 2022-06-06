@@ -65,6 +65,12 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('result/capture', [App\Http\Controllers\ResultController::class, 'index'])->name('result.capture');
     Route::post('result/create', [App\Http\Controllers\ResultController::class, 'create'])->name('result.create');
 
+    //Payment Routes
+    Route::get('payment/index', [App\Http\Controllers\PaymentController::class, 'index'])->name('payment.index');
+    Route::get('expense/list', [App\Http\Controllers\PaymentController::class, 'expenseList'])->name('expense.list');
+    Route::get('expense/view', [App\Http\Controllers\PaymentController::class, 'expenseView'])->name('expense.view');
+    Route::get('payment/list', [App\Http\Controllers\PaymentController::class, 'paymentList'])->name('payment.list');
+
     //Lesson Routes
     Route::get('lesson/list', [App\Http\Controllers\LessonController::class, 'getLessons'])->name('lesson.list');
     Route::get('lesson/index', [App\Http\Controllers\LessonController::class, 'index'])->name('lesson.index');

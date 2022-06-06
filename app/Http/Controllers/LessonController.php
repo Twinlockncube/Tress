@@ -79,11 +79,6 @@ class LessonController extends Controller
       $objectives = $request->get('objectives');
       $activities = $request->get('activities');
 
-    /*  ob_start();
-      var_dump($request->input('general'));
-      $result = ob_get_clean();
-      */
-      //$id
       $subject_id = $request->input('subject_id');
       $subject = Subject::where('id','=',$subject_id)->first();
       $lesson = new Lesson([

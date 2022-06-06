@@ -33,6 +33,10 @@ class Student extends Model
       return $this->belongsTo(Guardian::class);
     }
 
+    public function payments(){
+      return $this->hasMany(Payment::class);
+    }
+
     public function class_group()
     {
       return $this->belongsTo(ClassGroup::class);

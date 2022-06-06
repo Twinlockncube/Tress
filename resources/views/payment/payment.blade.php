@@ -4,14 +4,14 @@
 <div id="resultPane">
 
         <div id="resultLinks">
-          <table class="table table-bordered expenses-datatable table-sm table-striped">
+          <table class="table table-bordered yajra-datatable table-sm table-striped">
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Trans_no</th>
-                            <th>Acc_date</th>
-                            <th>Type</th>
-                            <th>Amount</th>
+                            <th>Id</th>
+                            <th>Subject</th>
+                            <th>Class</th>
+                            <th>Date</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -24,18 +24,31 @@
     <div class="row justify-content-end">
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header">{{ __('Expenses') }}</div>
+                <div class="card-header">{{ __('Assessment') }}</div>
 
                 <div class="card-body">
                     <form id="reg_form">
                         @csrf
 
-
                         <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Description') }}</label>
+                            <label for="id" class="col-md-4 col-form-label text-md-right">{{ __('Id') }}</label>
 
                             <div class="col-md-6">
-                                <input id="description" type="text" class="form-control form-control-sm input-sm @error('description') is-invalid @enderror" name="description" value="{{ old('description') }}" required autocomplete="description" autofocus>
+                                <input id="id" type="text" class="form-control form-control-sm input-sm @error('id') is-invalid @enderror" name="last_name" value="{{ old('last_name') }}" required autocomplete="last_name" autofocus>
+
+                                @error('id')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Title') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="title" type="text" class="form-control form-control-sm input-sm @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" required autocomplete="title" autofocus>
 
                                 @error('title')
                                     <span class="invalid-feedback" role="alert">
@@ -46,10 +59,10 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="currency" class="col-md-4 col-form-label text-md-right">{{ __('Currency') }}</label>
+                            <label for="description" class="col-md-4 col-form-label text-md-right">{{ __('Description') }}</label>
 
                             <div class="col-md-6">
-                                <input id="currency" type="text" class="form-control form-control-sm input-sm @error('currency') is-invalid @enderror" name="currency" value="{{ old('currency') }}" required autocomplete="currency" autofocus>
+                                <input id="description" type="text" class="form-control form-control-sm input-sm @error('description') is-invalid @enderror" name="description" value="{{ old('description') }}" required autocomplete="description" autofocus>
 
                                 @error('description')
                                     <span class="invalid-feedback" role="alert">
@@ -60,10 +73,10 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="group" class="col-md-4 col-form-label text-md-right">{{ __('Amount') }}</label>
+                            <label for="group" class="col-md-4 col-form-label text-md-right">{{ __('Class') }}</label>
 
                             <div class="col-md-6">
-                                <input id="amount" type="text" class="form-control form-control-sm input-sm @error('amount') is-invalid @enderror" name="amount" value="{{ old('amount') }}" required autocomplete="amount" autofocus>
+                                <input id="group" type="text" class="form-control form-control-sm input-sm @error('description') is-invalid @enderror" name="group" value="{{ old('description') }}" required autocomplete="group" autofocus>
 
                                 @error('group')
                                     <span class="invalid-feedback" role="alert">
@@ -74,16 +87,24 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="entity_to_bill" class="col-md-4 col-form-label text-md-right">{{ __('Entity_to_bill') }}</label>
+                            <label for="lesson" class="col-md-4 col-form-label text-md-right"><a href="#">{{ __('Lesson') }}</a></label>
 
                             <div class="col-md-6">
-                              <select  name="entity_to_bill" id="entity_to_bill" class="form-select form-control form-control-sm">
-                                  <option>No Choice</option>
-                                  <option>All</option>
-                                  <option>Level</option>
-                                  <option>Class</option>
-                                  <option>Individual</option>
-                              </select>
+                                <input id="lesson" type="text" class="form-control form-control-sm input-sm @error('lesson') is-invalid @enderror" name="lesson" value="{{ old('lesson') }}" required autocomplete="lesson" autofocus>
+
+                                @error('lesson')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="subject" class="col-md-4 col-form-label text-md-right">{{ __('Subject') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="sub" type="text" class="form-control form-control-sm input-sm @error('subject') is-invalid @enderror" name="sub" value="{{ old('subject') }}" required autocomplete="subject" autofocus>
 
                                 @error('subject')
                                     <span class="invalid-feedback" role="alert">
@@ -94,12 +115,12 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="group_name" class="col-md-4 col-form-label text-md-right">{{ __('Entity_Name') }}</label>
+                            <label for="category" class="col-md-4 col-form-label text-md-right">{{ __('Category') }}</label>
 
                             <div class="col-md-6">
-                                <input id="entity_name" type="text" class="form-control form-control-sm input-sm @error('entity_name') is-invalid @enderror" name="entity_name" value="{{ old('entity_name') }}" required autocomplete="entity_name" autofocus>
+                                <input id="category" type="email" class="form-control form-control-sm input-sm @error('category') is-invalid @enderror" name="category" value="{{ old('category') }}" required autocomplete="category">
 
-                                @error('subject')
+                                @error('category')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -108,7 +129,49 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="date" class="col-md-4 col-form-label text-md-right">{{ __('Accounting Date') }}</label>
+                            <label for="total" class="col-md-4 col-form-label text-md-right">{{ __('Total') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="total" type="text" class="form-control form-control-sm input-sm @error('birth') is-invalid @enderror" name="total" value="{{ old('total') }}" required autocomplete="total" autofocus>
+
+                                @error('total')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="weight" class="col-md-4 col-form-label text-md-right">{{ __('Weight') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="weight" type="text" class="form-control form-control-sm input-sm @error('nid') is-invalid @enderror" name="weight" value="{{ old('weight') }}" required autocomplete="weight" autofocus>
+
+                                @error('address')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="parent" class="col-md-4 col-form-label text-md-right">{{ __('Parent') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="parent" type="text" class="form-control form-control-sm input-sm @error('parent') is-invalid @enderror" name="parent" value="{{ old('parent') }}" required autocomplete="parent" autofocus>
+
+                                @error('parent')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="date" class="col-md-4 col-form-label text-md-right">{{ __('Date') }}</label>
 
                             <div class="col-md-6">
                                 <input id="date" type="date" class="form-control form-control-sm input-sm @error('date') is-invalid @enderror" name="date" value="{{ old('date') }}" required autocomplete="date" autofocus>
@@ -143,14 +206,14 @@
 
                     <script>
                     var new_entry = false;
-                    function createExpense(){
+                    function createAssessment(){
                       $.ajax({
                           type:'post',
                           url:'{{ route("assessment.create")}}',
                           data:$('form').serialize(),
                           success: function(response){
                             $('#id').val(response.id);
-                            $('.expenses-datatable').DataTable().ajax.reload();
+                            $('.yajra-datatable').DataTable().ajax.reload();
                           },
                           error: function(resp){
                             alert(resp.msg);
@@ -159,13 +222,13 @@
                       });
                     }
 
-                    function updateExpense(){
+                    function updateStudent(){
                       $.ajax({
                           type:'post',
                           url:"/update_student",
                           data:$('form').serialize(),
                           success: function(response){
-                            $('.expenses-datatable').DataTable().ajax.reload();
+                            $('.yajra-datatable').DataTable().ajax.reload();
                             swal('Tress','Student Edited Successfully','success');
                           },
                           error: function(resp){
@@ -174,7 +237,7 @@
                       });
                     }
 
-                    function deleteExpense(event){
+                    function deleteStudent(event){
                       event.preventDefault();
                       var id = $(event.target).parent().siblings(":first").next().html();
                       swal({
@@ -191,7 +254,7 @@
                                 url: "/delete_student",
                                 data:{id:id},
                                 success: function(response){
-                                  $('.expenses-datatable').DataTable().ajax.reload();
+                                  $('.yajra-datatable').DataTable().ajax.reload();
                                   swal('Tress',response.msg,'success');
                                 },
                                 error: function(response){
@@ -209,14 +272,34 @@
                       return false;
                     }
 
+                    function validateTotal(parent){
+                      $.ajax({
+                          type:'get',
+                          url:'{{route("assessment.val_total")}}',
+                          data:{parent:parent},
+                          success: function(response){
+                            var weight = $('#weight').val();
+                            var sum_sofar = response.children_sum_perc_weight;
+                            if(weight+sum_sofar>100){
+                              alert('Weight limit exceeded');
+                            }
+                            else{
+                              alert('Good weight');
+                            }
+                          },
+                          error: function(resp){
+                            alert(resp.msg);
+                          }
+                      });
+                    }
 
-                    function viewExpense(event){
+                    function viewAssess(event){
                       event.preventDefault();
                       var id = $(event.target).text();
                       //var id = $(event.target).parent().siblings(":first").nextAll().eq(1).html();
                       $.ajax({
                           type:'get',
-                          url:'{{route("expense.view")}}',
+                          url:'{{route("assessment.view")}}',
                           data:{id:id},
                           success: function(response){
                             //console.log(response);
@@ -243,13 +326,20 @@
                     var new_entry = true;
                     $(document).ready(function(){
 
+                        $('#parent').focusout(function(){
+                          var parent = $('#parent').val();
+                          if(parent.length>0){
+                            validateTotal(parent);
+                          }
+                        });
+
                         $('#submit').click(function(event){
                             event.preventDefault();
                             if(new_entry){
-                              createExpense();
+                              createAssessment();
                             }
                             else{
-                              updateExpense();
+                              updateAssessment();
                             }
                             $('#submit').attr("disabled",true);
                         });
@@ -276,18 +366,18 @@
 
                         $(function () {
 
-                         var table = $('.expenses-datatable').DataTable({
+                         var table = $('.yajra-datatable').DataTable({
                              processing: true,
                              serverSide: true,
-                             ajax: "{{ route('expense.list') }}",
+                             ajax: "{{ route('assessment.list') }}",
                              columns: [
                                  {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                                  {data: function(row){
-                                   return '<a href="#" onClick="viewExpense(event)" style="color:black">'+row.id+'</a>';
-                                 }, name: 'payment_no'},
+                                   return '<a href="#" onClick="viewAssess(event)" style="color:black">'+row.id+'</a>';
+                                 }, name: 'id'},
+                                 {data: 'subject.name', name: 'subject'},
+                                 {data: 'class_group.name', name: 'class_group'},
                                  {data: 'date', name: 'date'},
-                                 {data: 'type', name: 'type'},
-                                 {data: 'amount', name: 'amount'},
                                  {
                                      data: 'action',
                                      name: 'action',

@@ -17,9 +17,6 @@ class CreateCurrenciesTable extends Migration
             $table->string('id');
             $table->string('name');
             $table->string('short_code');
-            $table->string('status');
-            $table->string('name');
-            $table->integer('status')->default(0); //0 is not base currency, 1 is
             $table->timestamps();
         });
     }
