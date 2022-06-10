@@ -33,6 +33,10 @@ class Student extends Model
       return $this->belongsTo(Guardian::class);
     }
 
+    public function last_payment(){
+      return $this->hasOne(Payment::class)->latestOfMany();
+    }
+
     public function payments(){
       return $this->hasMany(Payment::class);
     }

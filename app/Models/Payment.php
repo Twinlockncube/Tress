@@ -11,6 +11,7 @@ class Payment extends Model
     protected $fillable = [
         'id',
         'payment_no',
+        'batch_no',
         'date',
         'reference_no',
         'description',
@@ -22,4 +23,8 @@ class Payment extends Model
         'sponsor_id',
         'student_id',
     ];
+
+    public function student(){
+      return $this->belongsTo(Student::class);
+    }
 }

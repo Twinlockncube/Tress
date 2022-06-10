@@ -16,8 +16,10 @@ class CreateSequenceTable extends Migration
         Schema::create('sequences', function (Blueprint $table) {
             $table->id();
             $table->integer('student_seq')->default('0');
-            $table->integer('teacher_seq')->default('0');
-
+            $table->integer('payment_seq')->default('0');
+            $table->integer('payment_batch_seq')->default('0');
+            $table->integer('guardian_seq')->default('0');
+            $table->integer('sponsor_seq')->default('0');
             $table->timestamps();
         });
     }

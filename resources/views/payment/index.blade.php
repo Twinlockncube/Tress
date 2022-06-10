@@ -30,6 +30,34 @@
                     <form id="reg_form">
                         @csrf
 
+                        <div class="form-group row">
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Reference_No') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="reference_no" type="text" class="form-control form-control-sm input-sm @error('reference_no') is-invalid @enderror" name="reference_no" value="{{ old('reference_no') }}" required autocomplete="reference_no" autofocus>
+
+                                @error('reference_no')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Batch_No') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="batch" type="text" class="form-control form-control-sm input-sm @error('batch') is-invalid @enderror" name="batch" value="{{ old('batch') }}" required autocomplete="batch" autofocus>
+
+                                @error('batch')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
 
                         <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Description') }}</label>
@@ -37,7 +65,7 @@
                             <div class="col-md-6">
                                 <input id="description" type="text" class="form-control form-control-sm input-sm @error('description') is-invalid @enderror" name="description" value="{{ old('description') }}" required autocomplete="description" autofocus>
 
-                                @error('title')
+                                @error('description')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -51,7 +79,7 @@
                             <div class="col-md-6">
                                 <input id="currency" type="text" class="form-control form-control-sm input-sm @error('currency') is-invalid @enderror" name="currency" value="{{ old('currency') }}" required autocomplete="currency" autofocus>
 
-                                @error('description')
+                                @error('currency')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -65,7 +93,7 @@
                             <div class="col-md-6">
                                 <input id="amount" type="text" class="form-control form-control-sm input-sm @error('amount') is-invalid @enderror" name="amount" value="{{ old('amount') }}" required autocomplete="amount" autofocus>
 
-                                @error('group')
+                                @error('amount')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -78,14 +106,14 @@
 
                             <div class="col-md-6">
                               <select  name="entity_to_bill" id="entity_to_bill" class="form-select form-control form-control-sm">
-                                  <option>No Choice</option>
-                                  <option>All</option>
-                                  <option>Level</option>
-                                  <option>Class</option>
-                                  <option>Individual</option>
+                                  <option value="0">No Choice</option>
+                                  <option value="1">All</option>
+                                  <option value="2">Level</option>
+                                  <option value="3">Class</option>
+                                  <option value="4">Individual</option>
                               </select>
 
-                                @error('subject')
+                                @error('entity_to_bill')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -99,7 +127,7 @@
                             <div class="col-md-6">
                                 <input id="entity_name" type="text" class="form-control form-control-sm input-sm @error('entity_name') is-invalid @enderror" name="entity_name" value="{{ old('entity_name') }}" required autocomplete="entity_name" autofocus>
 
-                                @error('subject')
+                                @error('entity_name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -118,6 +146,13 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+
+                            <div class="col-md-6">
+                                <input id="type" type="hidden" class="form-control form-control-sm input-sm @error('type') is-invalid @enderror" name="type" value="{{'0'}}" >
                             </div>
                         </div>
 
@@ -146,11 +181,12 @@
                     function createExpense(){
                       $.ajax({
                           type:'post',
-                          url:'{{ route("assessment.create")}}',
+                          url:'{{ route("payment.create")}}',
                           data:$('form').serialize(),
                           success: function(response){
-                            $('#id').val(response.id);
+                            $('#batch').val(response.batch_no);
                             $('.expenses-datatable').DataTable().ajax.reload();
+                            swal('Tress',"Payment(s) Captured Successfully",'success');
                           },
                           error: function(resp){
                             alert(resp.msg);
@@ -283,11 +319,16 @@
                              columns: [
                                  {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                                  {data: function(row){
-                                   return '<a href="#" onClick="viewExpense(event)" style="color:black">'+row.id+'</a>';
+                                   return '<a href="#" onClick="viewExpense(event)" style="color:black">'+row.payment_no+'</a>';
                                  }, name: 'payment_no'},
                                  {data: 'date', name: 'date'},
-                                 {data: 'type', name: 'type'},
-                                 {data: 'amount', name: 'amount'},
+                                 {data: function(row){
+                                   if(row.type==0){
+                                     return "Debit";
+                                   }
+                                   return "Credit";
+                                 }, name: 'type'},
+                                 {data: 'loc_amount', name: 'loc_amount'},
                                  {
                                      data: 'action',
                                      name: 'action',

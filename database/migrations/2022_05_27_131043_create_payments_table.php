@@ -16,6 +16,7 @@ class CreatePaymentsTable extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->string('payment_no');
+            $table->string('batch_no');
             $table->date('date');
             $table->string('reference_no')->nullable();
             $table->string('description');

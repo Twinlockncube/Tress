@@ -11,4 +11,8 @@ class Level extends Model
     public function class_groups(){
       return $this->hasMany(ClassGroup::class);
     }
+
+    public function students(){
+      return $this->hasManyThrough(Student::class,ClassGroup::class);
+    }
 }

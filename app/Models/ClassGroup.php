@@ -18,7 +18,7 @@ class ClassGroup extends Model
       'id',
       'name',
       'description',
-      'grade',
+      'level_id',
       'teacher_id',
     ];
 

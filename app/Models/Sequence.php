@@ -16,5 +16,9 @@ class Sequence extends Model
      */
     protected $fillable = [
         'student_seq',
+        'payment_seq',
+        'payment_batch_seq',
+        'sponsor_seq',
+        'guardian_seq',
     ];
 }

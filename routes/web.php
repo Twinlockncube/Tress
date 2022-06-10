@@ -67,6 +67,7 @@ Route::group(['middleware' => ['auth']], function() {
 
     //Payment Routes
     Route::get('payment/index', [App\Http\Controllers\PaymentController::class, 'index'])->name('payment.index');
+    Route::post('payment/create', [App\Http\Controllers\PaymentController::class, 'create'])->name('payment.create');
     Route::get('expense/list', [App\Http\Controllers\PaymentController::class, 'expenseList'])->name('expense.list');
     Route::get('expense/view', [App\Http\Controllers\PaymentController::class, 'expenseView'])->name('expense.view');
     Route::get('payment/list', [App\Http\Controllers\PaymentController::class, 'paymentList'])->name('payment.list');

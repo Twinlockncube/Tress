@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Payment;
+use App\Models\Level;
+use App\Models\Sequence;
+use App\Models\Student;
+use App\Models\ClassGroup;
 use Auth;
 use DataTables;
 
@@ -14,38 +18,81 @@ class PaymentController extends Controller
     return view('payment\index');
   }
 
+  public function payment_no($string){
+    $length = 4;
+    $postfix = str_pad($string,$length,"0", STR_PAD_LEFT);
+    $prefix = substr(date('Y'),2);
+    return $prefix."PAY".$postfix;
+  }
+
+  public function batch_no(Sequence $seq){
+    $length = 4;
+    $string = $seq->payment_batch_seq + 1;
+    $postfix = str_pad($string,$length,"0", STR_PAD_LEFT);
+    $prefix = substr(date('Y'),2);
+    return $prefix."BAT".$postfix;
+  }
+
     public function create(Request $request){
+      $type = 1;
+      $sponsor_id = $request->input('sponsor_id');
+      $seq = Sequence::find(1);
+      $pay_count = $seq->payment_seq;
+
+      if(!($request->input('type')===null)){
+        $sponsor_id = "SYSTEM";
+        $type = 0;
+      }
       $payment = new Payment([
+        'batch_no'=>$this->batch_no($seq),
         'date'=>$request->input('date'),
         'reference_no' =>$request->input('reference_no'),
         'description'=>$request->input('description'),
         'currency'=>$request->input('currency'),
-        'rate'=>$request->input('rate'),
-        'act_amount'=>$request->input('act_amount'),
-        'loc_amount'=>$request->input('loc_amount'),
-        'sponsor_id'=>$request->input('sponsor_id'),
+        'act_amount'=>$request->input('amount'),
+        'loc_amount'=>$request->input('amount'),
+        'type'=>$type,
+        'sponsor_id'=>$sponsor_id,
       ]);
 
       $students = null;
-      if($request->input('criterion')===0){
-        $students = Student::where('class_id','=',$class_id)->get();
+      $payments = array();
+
+      if($request->input('entity_to_bill')==0){
+        return;
       }
-      else if($request->input('criterion')===1){
-        $students = Student::where('level_id','=',$level_id)->get();
+      else if($request->input('entity_to_bill')==1){
+        $students = Student::where('id','<>',null)->with('last_payment')->get();;
+      }
+      else if($request->input('entity_to_bill')==2){
+        $level = Level::find($request->input('entity_name'));
+        $students = $level->students()->with('last_payment')->get();
+      }
+      else if($request->input('entity_to_bill')==3){
+        $students = Student::where("class_group_id","=",$request->input('entity_name'))->with('last_payment')->get();
       }
       else{
-        $students = Student::all()->get();
+        $student = Student::find($request->input('entity_name'));
+        array_push($students,$student);
       }
 
       foreach($students as $student){
-        $balance = ($student->payments()===null)? $payment->amount: $student->payments()->latest()->loc_balance - $payment->loc_amount;
-        $stu_payment = $payment;
-        $stu_payment->loc_balance = $balance;
-        $stu_payment->student_id = $student->id;
-        $stu_payment->save();
+        $payment = $payment->replicate();
+        $curr_balance = ($student->last_payment===null)?0:$student->last_payment->loc_balance;
+        $balance = ($type==1)?$curr_balance+$payment->loc_amount:$curr_balance-$payment->loc_amount;
+        $payment->loc_balance = $balance;
+        $payment->payment_no = $this->payment_no(strval(++$pay_count));
+        $payment->student_id = $student->id;//student()->associate($student);
+        $proxy = $payment;
+        array_push($payments,json_decode(json_encode($payment),true));
+
       }
 
-      return response()->json(["msg"=>"Payments Captured Successfully"]);
+      if(Payment::insert($payments)){
+        $seq->update(['payment_seq'=>$pay_count,'payment_batch_seq'=>$seq->payment_batch_seq + 1]);
+        return response()->json($payments[0]);
+      }
+
     }
 
     public function expenseList(Request $request){

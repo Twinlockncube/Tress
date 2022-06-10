@@ -17,7 +17,7 @@ class CreateClassGroupsTable extends Migration
             $table->string('id')->primary();
             $table->string('name');
             $table->string('description');
-            $table->integer('grade');
+            $table->integer('level_id');
             $table->string('teacher_id')->nullable();
             $table->timestamps();
         });
