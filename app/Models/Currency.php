@@ -16,7 +16,12 @@ class Currency extends Model
       'name',
       'status',
     ];
+    public $incrementing = false;
     public function latestRate(){
       return $this->hasOne(Rate::class)->latestOfMany();
+    }
+
+    public function rate(){
+      return $this->hasMany(Rate::class);
     }
 }

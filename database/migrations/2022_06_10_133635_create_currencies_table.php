@@ -13,12 +13,13 @@ class CreateCurrenciesTable extends Migration
      */
     public function up()
     {
-        Schema::create('currencies', function (Blueprint $table) {
-            $table->string('id');
-            $table->string('name');
-            $table->string('short_code');
-            $table->timestamps();
-        });
+      Schema::create('currencies', function (Blueprint $table) {
+          $table->string('id')->primary();
+          $table->string('name');
+          $table->string('short_code');
+          $table->timestamps();
+      });
+
     }
 
     /**

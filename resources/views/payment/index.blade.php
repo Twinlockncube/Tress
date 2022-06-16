@@ -8,7 +8,7 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Trans_no</th>
+                            <th>Batch_no</th>
                             <th>Acc_date</th>
                             <th>Type</th>
                             <th>Amount</th>
@@ -110,7 +110,7 @@
                                   <option value="1">All</option>
                                   <option value="2">Level</option>
                                   <option value="3">Class</option>
-                                  <option value="4">Individual</option>
+                                  <option value="4">Individual(s)</option>
                               </select>
 
                                 @error('entity_to_bill')
@@ -184,7 +184,7 @@
                           url:'{{ route("payment.create")}}',
                           data:$('form').serialize(),
                           success: function(response){
-                            $('#batch').val(response.batch_no);
+                            $('#batch').val(response.id);
                             $('.expenses-datatable').DataTable().ajax.reload();
                             swal('Tress',"Payment(s) Captured Successfully",'success');
                           },
@@ -212,7 +212,7 @@
 
                     function deleteExpense(event){
                       event.preventDefault();
-                      var id = $(event.target).parent().siblings(":first").next().html();
+                      var id = $(event.target).closest('tr').children(":first").next().text();
                       swal({
                             title: "Are you sure?",
                             text: "Once deleted, you will not be able to recover the record",
@@ -224,11 +224,11 @@
                             if (willDelete) {
                               $.ajax({
                                 type: 'get',
-                                url: "/delete_student",
+                                url: '{{route("payment.deleteBatch")}}',
                                 data:{id:id},
                                 success: function(response){
                                   $('.expenses-datatable').DataTable().ajax.reload();
-                                  swal('Tress',response.msg,'success');
+                                  swal('Tress',"Batch Deleted Successfully",'success');
                                 },
                                 error: function(response){
                                   if(response.status == 403){
@@ -256,15 +256,11 @@
                           data:{id:id},
                           success: function(response){
                             //console.log(response);
-                            $('#id').val(response.id);
-                            $('#title').val(response.title);
+                            $('#reference_no').val(response.reference_no);
+                            $('#batch').val(response.id);
                             $('#description').val(response.description);
-                            $('#group').val(response.class_group_id);
-                            $('#sub').val(response.subject.name);
-                            $('#category').val(response.category);
-                            $('#total').val(response.total);
-                            $('#weight').val(response.perc_weight);
-                            $('#parent').val(response.parent);
+                            $('#currency').val(response.currency);
+                            $('#amount').val(response.act_amount);
                             $('#date').val(response.date);
 
                             $('form input').attr("readonly",true);
@@ -319,8 +315,8 @@
                              columns: [
                                  {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                                  {data: function(row){
-                                   return '<a href="#" onClick="viewExpense(event)" style="color:black">'+row.payment_no+'</a>';
-                                 }, name: 'payment_no'},
+                                   return '<a href="#" onClick="viewExpense(event)" style="color:black">'+row.id+'</a>';
+                                 }, name: 'batch_no'},
                                  {data: 'date', name: 'date'},
                                  {data: function(row){
                                    if(row.type==0){

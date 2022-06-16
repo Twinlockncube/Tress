@@ -71,6 +71,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('expense/list', [App\Http\Controllers\PaymentController::class, 'expenseList'])->name('expense.list');
     Route::get('expense/view', [App\Http\Controllers\PaymentController::class, 'expenseView'])->name('expense.view');
     Route::get('payment/list', [App\Http\Controllers\PaymentController::class, 'paymentList'])->name('payment.list');
+    Route::get('payment/delete_batch', [App\Http\Controllers\PaymentController::class, 'deleteBatch'])->name('payment.deleteBatch');
 
     //Lesson Routes
     Route::get('lesson/list', [App\Http\Controllers\LessonController::class, 'getLessons'])->name('lesson.list');

@@ -10,21 +10,17 @@ class Payment extends Model
     use HasFactory;
     protected $fillable = [
         'id',
-        'payment_no',
-        'batch_no',
-        'date',
-        'reference_no',
-        'description',
-        'currency',
-        'act_amount',
-        'loc_amount',
+        'batch_id',
         'loc_balance',
-        'type',
-        'sponsor_id',
         'student_id',
     ];
+    public $incrementing = false;
 
     public function student(){
       return $this->belongsTo(Student::class);
+    }
+
+    public function batch(){
+      $this->belongsTo(Batch::class);
     }
 }

@@ -13,10 +13,15 @@ class CreateRatesTable extends Migration
      */
     public function up()
     {
-        Schema::create('rates', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+      Schema::create('rates', function (Blueprint $table) {
+                 $table->id();
+                 $table->string('currency_id')
+                       ->references('id')
+                       ->on('currencies')
+                       ->onDelete('cascade');
+                 $table->decimal('value',15,9);
+                 $table->timestamps();
+             });
     }
 
     /**
