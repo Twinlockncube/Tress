@@ -18,7 +18,7 @@ class CreateBatchesTable extends Migration
           $table->string('date');
           $table->string('reference_no')->nullable();
           $table->string('description');
-          $table->string('currency');
+          $table->string('currency_id');
           $table->decimal('act_amount',15,2);
           $table->decimal('act_total',15,2);
           $table->decimal('loc_amount',15,2);

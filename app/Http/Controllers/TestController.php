@@ -19,6 +19,7 @@ use App\Models\Currency;
 use App\Models\Batch;
 use Auth;
 use DataTables;
+use Carbon\Carbon;
 
 class TestController extends Controller
 {
@@ -39,54 +40,23 @@ class TestController extends Controller
   }
 
   public function theTest(Request $request){
-    $type = 1;
-    $sponsor_id = "XXXXXXX";
     $seq = Sequence::find(1);
     $pay_count = $seq->payment_seq;
-    $rate = Currency::find('USD')->latestRate->value;
-    $loc_amount = $rate * 10.00;
+    //$id = $request->input('id');
+    $id = "22BAT0007";
+    $description = $request->input('description');
 
-    if(!($request->input('type')===null)){
-      $sponsor_id = "SYSTEM";
-      $type = 0;
-    }
+    $rev_payments = array();
 
-    $payment = new Payment([
-
-    ]);
-
-    $batch = new Batch([
-      'id'=>$this->batch_no($seq),
-      'date'=>"2020-09-10",
-      'reference_no' =>"07865",
-      'description'=>"Hello wprld",
-      'currency'=>"USD",
-      'act_amount'=>10.00,
-      'loc_amount'=>$loc_amount,
-      'type'=>$type,
-      'sponsor_id'=>$sponsor_id,
-      'entity_to_bill' =>2,
-      'user_id'=>Auth::user()->id,
-    ]);
-
-    $students = null;
-    $payments = array();
-
-    $students = Student::where("class_group_id","=","1A1")->with('last_payment')->get();
-
-
-    foreach($students as $student){
-      $payment = $payment->replicate();
-      $curr_balance = ($student->last_payment===null)?0:$student->last_payment->loc_balance;
-      $balance = ($type==1)?$curr_balance+$loc_amount:$curr_balance-$loc_amount;
-      $payment->loc_balance = $balance;
-      $payment->id = $this->payment_no(strval(++$pay_count));
-      $payment->student_id = $student->id;
-      $payment->batch_id = $batch->id;
-      return $payment;
-      array_push($payments,json_decode(json_encode($payment),true));
-      break;
-    }
+    $batch = Batch::find($id)->payments;
+    /*$rev_batch = $batch->replicate();
+    $rev_batch->id = $this->batch_no($seq);
+    $rev_batch->date = Carbon::now()->toDateTimeString();
+    $rev_batch->reference_no = $id;
+    $rev_batch->description = $description;
+    $rev_batch->sponsor_id =$batch->sponsor_id;
+    $rev_batch->type =(int)(!((bool)($batch->type)));
+    $rev_batch->user_id=Auth::user()->id;*/
 
     return $batch;
    }

@@ -13,7 +13,7 @@ class Batch extends Model
         'date',
         'reference_no',
         'description',
-        'currency',
+        'currency_id',
         'act_amount',
         'act_total',
         'loc_amount',

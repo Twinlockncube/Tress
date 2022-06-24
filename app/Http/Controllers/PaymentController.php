@@ -11,6 +11,7 @@ use App\Models\ClassGroup;
 use App\Models\Batch;
 use App\Models\Rate;
 use App\Models\Currency;
+use Carbon\Carbon;
 use Auth;
 use DataTables;
 
@@ -19,6 +20,10 @@ class PaymentController extends Controller
 
   public function index(){
     return view('payment\index');
+  }
+
+  public function batch_create(){
+    return view('payment\batch_create');
   }
 
   public function payment_no($string){
@@ -79,7 +84,7 @@ class PaymentController extends Controller
         'date'=>$request->input('date'),
         'reference_no' =>$request->input('reference_no'),
         'description'=>$request->input('description'),
-        'currency'=>$request->input('currency'),
+        'currency_id'=>$request->input('currency'),
         'act_amount'=>$request->input('amount'),
         'act_total' =>$act_total,
         'loc_total' =>$loc_total,
@@ -111,7 +116,7 @@ class PaymentController extends Controller
 
     public function expenseList(Request $request){
       if ($request->ajax()) {
-          $data = Batch::where('type','=',0)->latest()->get();
+          $data = Batch::latest()->get();
           return Datatables::of($data)
               ->addIndexColumn()
               ->addColumn('action', function($row){
@@ -150,4 +155,40 @@ class PaymentController extends Controller
       $batch = Batch::find($batch_id);
       $batch->delete();
     }
+
+    public function reverseTransaction(Request $request){
+      $seq = Sequence::find(1);
+      $pay_count = $seq->payment_seq;
+      $id = $request->input('id');
+      $description = $request->input('description');
+
+      $rev_payments = array();
+      $sign =array(1,-1);
+      $batch = Batch::find($id);//->with('payments')->get();
+      $rev_batch = $batch->replicate();
+      $rev_batch->id = $this->batch_no($seq);
+      $rev_batch->date = Carbon::now()->toDateTimeString();
+      $rev_batch->reference_no = $id;
+      $rev_batch->description = $description;
+      $rev_batch->sponsor_id ="SYSTEM";
+      $rev_batch->type =(int)(!((bool)($batch->type)));
+      $rev_batch->user_id=Auth::user()->id;
+
+      $payments = Batch::find($id)->payments;
+      foreach($payments as $payment){
+        $rev_payment = new Payment();
+        $rev_payment->id = $this->payment_no(strval(++$pay_count));
+        $rev_payment->batch_id = $rev_batch->id;
+        $rev_payment->loc_balance = $payment->loc_balance+($rev_payment->loc_amount*$sign[$rev_batch->type]);
+        $rev_payment->student_id = $payment->student_id;
+        array_push($rev_payments,json_decode(json_encode($rev_payment),true));
+      }
+
+      if($rev_batch->save() && Payment::insert($rev_payments)){
+        $seq->update(['payment_seq'=>$pay_count,'payment_batch_seq'=>$seq->payment_batch_seq + 1]);
+        return response()->json($rev_payments[0]);
+      }
+
+    }
+
 }

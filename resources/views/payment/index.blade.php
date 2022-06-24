@@ -12,6 +12,7 @@
                             <th>Acc_date</th>
                             <th>Type</th>
                             <th>Amount</th>
+                            <th>Total</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -156,8 +157,8 @@
                             </div>
                         </div>
 
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
+                        <div class="form-group row ">
+                            <div class="col-md-12 offset-md-4">
                                 <button type="submit" class="btn btn-dark btn-inline btn-sm" id="submit" disabled="true">
                                     {{ __('Submit') }}
                                 </button>&nbsp;&nbsp;
@@ -168,6 +169,12 @@
                                     {{ __('New') }}
                                 </button>
 
+                                <button class="btn  btn-outline-danger btn-inline btn-sm" id="reverse">
+                                  {{ __('Undo') }}
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-90deg-left" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1.146 4.854a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H12.5A2.5 2.5 0 0 1 15 6.5v8a.5.5 0 0 1-1 0v-8A1.5 1.5 0 0 0 12.5 5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4z"/>
+                                  </svg>
+                                </button>
                                 <!--<label  class="col-md-4 col-form-label text-md-right">{{ __('Processing . . .') }}</label>-->
                             </div>
 
@@ -272,6 +279,35 @@
                       });
                       return false;
                     }
+
+                    function reverseTransaction(event){
+                      event.preventDefault();
+                      let id = $('#batch').val();
+                      const description = window.prompt("Enter reversal descrition");
+                    //  console.log(val);
+                      $.ajax({
+                          type:'post',
+                          url: "{{route('expense.reverse')}}",
+                          data:{"_token": "{{ csrf_token() }}",id:id,description:description },
+                          success: function(response){
+
+                            $('#reference_no').val(response.reference_no);
+                            $('#batch').val(response.id);
+                            $('#description').val(response.description);
+                            $('#currency').val(response.currency);
+                            $('#amount').val(response.act_amount);
+                            $('#date').val(response.date);
+
+                            $('form input').attr("readonly",true);
+                            $('#submit').attr("disabled",true);
+                          },
+                          error: function(resp){
+                            alert(resp.msg);
+                          }
+                      });
+                      return false;
+                    }
+
                     var new_entry = true;
                     $(document).ready(function(){
 
@@ -302,6 +338,11 @@
                             $('#submit').attr("disabled",false);
                         });
 
+                        $('#reverse').click(function(event){
+                            event.preventDefault();
+                            reverseTransaction(event);
+                        });
+
                         $('#reg_form input').change(function(){
                             $('#submit').attr("disabled",false);
                         });
@@ -325,6 +366,7 @@
                                    return "Credit";
                                  }, name: 'type'},
                                  {data: 'loc_amount', name: 'loc_amount'},
+                                 {data: 'loc_total', name: 'loc_total'},
                                  {
                                      data: 'action',
                                      name: 'action',
