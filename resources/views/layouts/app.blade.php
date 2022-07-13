@@ -7,6 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Laravel 8 User Roles and Permissions Tutorial') }}</title>
     <!-- Scripts -->
+    <script src="{{ asset('js/jquery.js') }}" defer></script>
     <script src="{{ asset('js/app.js') }}" defer></script>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">

@@ -47,7 +47,7 @@
   <div class="form-group">
         <label for="description">{{__('Total Amount')}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
         <div class="col-xs-1">
-        <input type="text" class="form-control form-control-sm mb-2" name="total" id="total">
+        <input type="text" class="form-control form-control-sm mb-2" name="total" id="total" value="0">
       </div>
   </div>
   </div>
@@ -102,8 +102,8 @@
       <tr>
   		    <th>#</th>
           <th>Student Number</th>
-          <th>First Name</th>
           <th>Last Name</th>
+          <th>First Name</th>
           <th>Amount</th>
           <th>Reference No</th>
           <th>Action</th>
@@ -117,7 +117,7 @@
           <td><input type="text" name="student[]" placeholder="Student Id" size="20" /></td>
           <td><input type="text" name="last_name[]" placeholder="Last Name" size="20" /></td>
           <td><input type="text" name="name[]" placeholder="First Name" size="20" /></td>
-          <td><input type="text" name="amount[]" class="amount" id="amount" placeholder="Amount" size="20" /></td>
+          <td><input type="text" name="amount[]" class="not-visited" id="amount" placeholder="Amount" size="20"/></td>
           <td><input type="text" name="reference_no[]" placeholder="Reference" size="20" /></td>
           <td><button class="btn btn-sm btn-outline-danger" onClick="deleteLine(event)">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
@@ -144,6 +144,8 @@
  var table;
  var tableAss
  var test_var;
+ var textChanged = false;
+ var prev_val;
 
  $(document).ready(function(){
 
@@ -169,7 +171,7 @@
                             +'<td><input type="text" name="student[]" placeholder="Student Id" size="20" /></td>'
                             +'<td><input type="text" name="last_name[]" placeholder="Last Name" size="20" /></td>'
                             +'<td><input type="text" name="name[]" placeholder="First Name" size="20" /></td>'
-                            +'<td><input type="text" name="amount[]" class="amount" id="amount" placeholder="Amount" size="20" /></td>'
+                            +'<td><input type="text" name="amount[]" class="not-visited" id="amount" placeholder="Amount" size="20" /></td>'
                             +'<td><input type="text" name="reference[]" placeholder="Reference" size="20" /></td>'
                             +'<td>'+del_butt+'</td>'
                         +'</tr>';
@@ -177,30 +179,31 @@
     }
   });
 
-  $('#group').focusin(function(){
-    $('input').not(this).val("");
+  $('#amount').focusin(function(){
+    textChanged = false;
+    prev_val = $(this).val();
   });
 
-  $('#amount').blur(function(){
-    let init_amount = parseFloat($('#total').val());
-    let this_amount = parseFloat($(this).val());
-    let curr_total = init_amount + this_amount;
-    $('#total').val(curr_total);
+  $('#amount').bind('input paste',function(){
+    textChanged = true;
   });
-  $('.yajra-datatable').on("blur","td",function(){
-    var el_children = $('#myinput').is(':checkbox')
-    var first_child = el_children[0];
-    if(!($(this).children().first().is(':checkbox'))){
-       var score = parseInt($(this).text());
-       var total = parseInt($('#total').val());
-      if(score>total){
-        $(this).text("- -");
-        alert("Unacceptable Value");
-        //$(this).focus();
-      }
+
+  $('.payment-datatable').on('blur','#amount',function(){
+    let this_amount = parseFloat($(this).val());
+    if(isNaN(this_amount)){
+      alert("Wrong input");
+      $(this).val("");
+      return;
     }
 
+    if($(this).hasClass('not-visited') || textChanged){
+      let init_amount = parseFloat($('#total').val());
+      let curr_total = init_amount - prev_val + this_amount;
+      $('#total').val(curr_total);
+      $(this).removeClass('not-visited');
+    }
   });
+
 
   $('#lesson').focusout(function(){
     var code = $('#lesson').val();
@@ -241,7 +244,19 @@
 
 
      $('#submit').click(function(){
-       let data = $('#pay').serializeArray();
+       let header = $('#form_header').serialize();
+       let data = new Array();
+       $('.payment-datatable > tbody').children().each(function(){
+         let id = $(this).find('td:eq(1)').find('input').val();
+         let amount = $(this).find('td:eq(4)').find('input').val();
+         let reference = $(this).find('td:eq(5)').find('input').val();
+
+         payment  = {};
+         payment['student_id'] =id;
+         payment['amount'] = amount;
+         payment['reference'] = reference;
+         data.push(payment);
+       });
        console.log(data);
 
       /*  var lines = new Array();
@@ -307,30 +322,26 @@
  }
  function deleteLine(event){
    event.preventDefault();
-   if($(event.target).closest('tbody').children().length==1){
-     var num =0;
-     $(event.target).closest('tr').children().each(function(){
-       if($(this).children().length==0){
-         if(num==0){
-           num++;
-         }
-         else {
-           $(this).html("");
-         }
-       }
+   let curr_element = $(event.target);
+   let this_amount = parseFloat(curr_element.closest('tr').children().eq(4).children(':first').val());
+   let curr_total = parseFloat($('#total').val());
+   $('#total').val(curr_total-this_amount);
+
+   if(curr_element.closest('tbody').children().length==1){
+     curr_element.closest('tr').children().each(function(){
+    $(this).children(':first').val("");
      });
    }
    else{
-     var curr_element = $(event.target);
-     var line_num = parseInt(curr_element.closest('tr').children().eq(0).html());
+     let line_num = parseInt(curr_element.closest('tr').children().eq(0).html());
      $.each(curr_element.closest('tbody').children(),function(){
-         var this_line = parseInt($(this).children().eq(0).html());
+         let this_line = parseInt($(this).children().eq(0).html());
          if(this_line>line_num){
            $(this).children().eq(0).html(--this_line);
          }
      });
      curr_element.closest('tr').remove();
-     //alert($('.obj-datatable > tbody > tr').after(curr_element).length);
+
    }
 
    return false;

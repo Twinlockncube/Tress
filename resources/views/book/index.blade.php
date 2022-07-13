@@ -12,7 +12,7 @@
                             <th>Name</th>
                             <th>Surname</th>
                             <th>Action</th>
-</tr>
+                        </tr>
                     </thead>
                     <tbody>
                     </tbody>
@@ -58,7 +58,7 @@
     <div class="row justify-content-end">
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header">{{ __('Student') }}</div>
+                <div class="card-header">{{ __('Books') }}</div>
 
                 <div class="card-body">
                     <form id="reg_form">

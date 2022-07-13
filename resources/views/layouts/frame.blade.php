@@ -5,22 +5,30 @@
 <!-- Copyright 2005 Macromedia, Inc. All rights reserved. -->
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>HWS Management</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+-->
+<link href="{{ asset('css/app.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="{{ asset('/assets/css/shared/emx_nav_right.css') }}" type="text/css" />
+
 
 <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
 <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+-->
+<script src="{{ asset('js/jquery.js') }}" ></script>
+<script src="{{ asset('js/app.js') }}" defer></script>
+
 
 <!--Pop up Test-->
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <!--End pop-->
 
-<link rel="stylesheet" href="{{ asset('/assets/css/shared/emx_nav_right.css') }}" type="text/css" />
+
 <script type="text/javascript">
 <!--
 <!--
@@ -109,7 +117,7 @@ function MM_validateForm() { //v4.0
                 <div id="subglobal2" class="subglobalNav"> <a href="#">Sponsors</a> | <a href="#">subglobal2 link</a> | <a href="#">subglobal2 link</a> | <a href="#">subglobal2 link</a> | <a href="#">subglobal2 link</a> | <a href="#">subglobal2 link</a> | <a href="#">subglobal2 link</a> </div>
                 <div id="subglobal3" class="subglobalNav"> <a href="{{route('payment.index')}}">Payments</a> | <a href="{{route('payment.batch_create')}}">Group/Individual Payments</a> | <a href="#">Balance Sheet</a> | <a href="#">Statements</a> </div>
                 <div id="subglobal4" class="subglobalNav"> <a href="{{ route('regist') }}">Profile</a> | <a href="{{route('guardian')}}">Guardian</a> | <a href="#">Register</a> | <a href="{{route('assessment.capture')}}">Assessment</a> | <a href="{{route('result.capture')}}">Result</a> | <a href="{{route('attendance.create')}}">Attendance</a> | <a href="#">Discipline</a> </div>
-                <div id="subglobal5" class="subglobalNav"> <a href="#">Obj</a> | <a href="#">Form2</a> | <a href="#">Form3</a> | <a href="#">Form4</a> | <a href="#">Form5</a> | <a href="#">Form6</a> </div>
+                <div id="subglobal5" class="subglobalNav"> <a href="{{route('book.index')}}">Books</a> | <a href="#">Form2</a> | <a href="#">Form3</a> | <a href="#">Form4</a> | <a href="#">Form5</a> | <a href="#">Form6</a> </div>
               	  <div id="subglobal6" class="subglobalNav"> <a href="{{ route('lesson.index') }}">Plan</a> | <a href="{{route('class_lesson.index')}}">Classes</a> </div>
                 <div id="subglobal7" class="subglobalNav"> <a href="#">subglobal7 link</a> | <a href="#">subglobal7 link</a> | <a href="#">subglobal7 link</a> | <a href="#">Form1</a> | <a href="#">Form2</a> | <a href="#">Form3</a> | <a href="#">Form4</a> </div>
                 <div id="subglobal8" class="subglobalNav"> <a href="#">subglobal8 link</a> | <a href="#">subglobal8 link</a> | <a href="#">subglobal8 link</a> | <a href="#">subglobal8 link</a> | <a href="#">subglobal8 link</a> | <a href="#">subglobal8 link</a> | <a href="#">subglobal8 link</a> </div>

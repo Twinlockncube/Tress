@@ -65,6 +65,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('result/capture', [App\Http\Controllers\ResultController::class, 'index'])->name('result.capture');
     Route::post('result/create', [App\Http\Controllers\ResultController::class, 'create'])->name('result.create');
 
+    //Books Routes
+    Route::get('books/books', [App\Http\Controllers\BookController::class, 'index'])->name('book.index');
+
     //Payment Routes
     Route::get('payment/index', [App\Http\Controllers\PaymentController::class, 'index'])->name('payment.index');
     Route::post('payment/create', [App\Http\Controllers\PaymentController::class, 'create'])->name('payment.create');
