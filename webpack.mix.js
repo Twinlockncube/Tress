@@ -16,6 +16,7 @@ const mix = require('laravel-mix');
    .vue()
     .sass('resources/sass/app.scss', 'public/css');*/
 mix.scripts(['node_modules/datatables.net/js/jquery.dataTables.min.js',
+            'node_modules/sweetalert/dist/sweetalert.min.js',
             'node_modules/bootstrap/dist/js/bootstrap.js'],'public/js/app.js')
    .scripts(['node_modules/jquery/dist/jquery.min.js'],'public/js/jquery.js')
    .styles(['node_modules/bootstrap/dist/css/bootstrap.css',

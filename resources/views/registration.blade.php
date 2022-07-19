@@ -11,8 +11,8 @@
                             <th>Id</th>
                             <th>Name</th>
                             <th>Surname</th>
-                            <th>Action</th>
-</tr>
+                            <th>Class</th>
+                        </tr>
                     </thead>
                     <tbody>
                     </tbody>
@@ -218,8 +218,22 @@
                             </div>
                         </div>
 
+                        <div class="form-group row">
+                            <label for="nid" class="col-md-4 col-form-label text-md-right">{{ __('Class') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="class_group" type="text" class="form-control form-control-sm input-sm @error('class_group') is-invalid @enderror" name="class_group" value="{{ old('class_group') }}" required autocomplete="class_group" autofocus>
+
+                                @error('class_group')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
                         <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
+                            <div class="col-md-12 offset-md-4">
                                 <button type="submit" class="btn btn-dark btn-inline btn-sm" id="submit" disabled="true">
                                     {{ __('Submit') }}
                                 </button>
@@ -229,7 +243,7 @@
                                 <button class="btn btn-primary btn-inline btn-sm" id="new">
                                     {{ __('New') }}
                                 </button>
-                                <button class="btn" id="deleter">
+                                <button class="btn  btn-outline-danger" id="deleter" onClick="deleteStudent(event)">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                       <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                                       <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
@@ -291,7 +305,8 @@
 
                     function deleteStudent(event){
                       event.preventDefault();
-                      var id = $(event.target).parent().siblings(":first").next().html();
+                      //var id = $(event.target).parent().siblings(":first").next().html();
+                      var id = $('#sid').val();
                       swal({
                             title: "Are you sure?",
                             text: "Once deleted, you will not be able to recover the record",
@@ -408,12 +423,7 @@
                                  }, name: 'id'},
                                  {data: 'name', name: 'name'},
                                  {data: 'last_name', name: 'last_name'},
-                                 {
-                                     data: 'action',
-                                     name: 'action',
-                                     orderable: true,
-                                     searchable: true
-                                 },
+                                 {data: 'class_group_id', name: 'class_group_id'},
                              ]
                          });
 

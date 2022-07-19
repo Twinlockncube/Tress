@@ -633,6 +633,16 @@ table button:hover{
 
 }
 
+.value{
+	border: 1px solid blue;
+	padding: 3px;
+	margin-left: 12px;
+	border-bottom-right-radius: 3px;
+	border-bottom-left-radius: 3px;
+	border-top-right-radius: 3px;
+	border-top-left-radius: 3px;
+}
+
 #DataTables_Table_0_previous{
 
 }

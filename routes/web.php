@@ -67,6 +67,11 @@ Route::group(['middleware' => ['auth']], function() {
 
     //Books Routes
     Route::get('books/books', [App\Http\Controllers\BookController::class, 'index'])->name('book.index');
+    Route::get('books/list', [App\Http\Controllers\BookController::class, 'getBooks'])->name('books.list');
+    Route::post('books/create', [App\Http\Controllers\BookController::class, 'create'])->name('books.create');
+    Route::get('books/view', [App\Http\Controllers\BookController::class, 'view'])->name('books.view');
+    Route::get('books/delete', [App\Http\Controllers\BookController::class, 'delete'])->name('books.delete');
+    Route::post('books/update', [App\Http\Controllers\BookController::class, 'update'])->name('books.update');
 
     //Payment Routes
     Route::get('payment/index', [App\Http\Controllers\PaymentController::class, 'index'])->name('payment.index');

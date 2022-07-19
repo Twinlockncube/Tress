@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Book extends Model
 {
     use HasFactory;
+    public $incrementing = false;
+    protected $fillable = [
+                'id',
+                'author',
+                'title',
+                'edition',
+                'subject_id',
+                'worth',
+                'currency_id',
+                'category',
+              ];
 }

@@ -30,7 +30,6 @@ class StudentFactory extends Factory
           'dob' => $this->faker->date($format = 'Y-m-d', $max = 'now'),
           'gender' => $this->faker->randomElement($items),
           'email' => $this->faker->unique()->safeEmail(),
-          'birth' => $this->faker->date($format = 'Y-m-d', $max = 'now'),
           'nid'  => $this->faker->text(10),
           'id' => "SD".$this->faker->unique()->numberBetween(1000,9000),
           'sponsor_id'  => $this->faker->text(10),
