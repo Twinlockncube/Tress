@@ -5,7 +5,7 @@
 
         <div id="resultLinks">
           <table class="table table-bordered lesson-datatable table-sm table-striped">
-                    <thead>
+                    <thead class="thead-dark">
                         <tr>
                             <th>No</th>
                             <th>Id</th>
@@ -32,7 +32,7 @@
       </div>
       <div class="modal-body">
         <table class="table table-bordered guard-datatable table-sm table-striped" width="80%">
-                  <thead>
+                  <thead class="thead-dark">
                       <tr>
                         <th>No</th>
                         <th>Id</th>

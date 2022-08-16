@@ -73,6 +73,18 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('books/delete', [App\Http\Controllers\BookController::class, 'delete'])->name('books.delete');
     Route::post('books/update', [App\Http\Controllers\BookController::class, 'update'])->name('books.update');
 
+    //Copies Routes
+    Route::get('copies/index', [App\Http\Controllers\CopyController::class, 'index'])->name('copies.index');
+    Route::get('copies/list', [App\Http\Controllers\CopyController::class, 'list'])->name('copies.list');
+
+    //Issues Routes
+    Route::get('issues/index', [App\Http\Controllers\IssueController::class, 'index'])->name('issues.index');
+    Route::get('issues/list', [App\Http\Controllers\IssueController::class, 'list'])->name('issues.list');
+
+    //Receipt Routes
+    Route::get('receipt/index', [App\Http\Controllers\ReceiptController::class, 'index'])->name('receipts.index');
+
+
     //Payment Routes
     Route::get('payment/index', [App\Http\Controllers\PaymentController::class, 'index'])->name('payment.index');
     Route::post('payment/create', [App\Http\Controllers\PaymentController::class, 'create'])->name('payment.create');

@@ -161,6 +161,20 @@
 
                         </div>
 
+                        <div class="form-group row">
+                            <label for="sid" class="col-md-4 col-form-label text-md-right"><a href="#" style="color:blue" onClick="adjust()" data-toggle="modal" data-target="#CatModal">{{__('Category')}}</a></label>
+
+                            <div class="col-md-6">
+                                <input id="category" type="text" class="form-control form-control-sm input-sm @error('category') is-invalid @enderror" name="category" value="{{ old('category') }}" required autocomplete="category" autofocus>
+
+                                @error('category')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-dark btn-inline btn-sm" id="submit" disabled="true">
@@ -282,6 +296,7 @@
                             $('#subject').val(response.subject_id);
                             $('#worth').val(response.worth);
                             $('#currency').val(response.currency_id);
+                            $('#category').val(response.category);
 
                             $('#reg_form input').attr("readonly",true);
                             $('#submit').attr("disabled",true);

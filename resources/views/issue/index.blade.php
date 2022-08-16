@@ -5,13 +5,15 @@
 
         <div id="resultLinks">
           <table class="table table-bordered yajra-datatable table-sm table-striped">
-                    <thead>
+                    <thead class="thead-dark">
                         <tr>
                             <th>No</th>
                             <th>Id</th>
-                            <th>Title</th>
-                            <th>Subject</th>
-
+                            <th>Book_Id</th>
+                            <th>Book_Copy</th>
+                            <th>Student</th>
+                            <th>Date_Received</th>
+                            <th>Details</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -21,18 +23,18 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade"  id="GuardModal" tabindex="-1" role="dialog" aria-labelledby="GuardModalCenterTitle" aria-hidden="true">
+<div class="modal fade"  id="StudentModal" tabindex="-1" role="dialog" aria-labelledby="StudentModal" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalTitle">Guardians/Parents</h5>
+        <h5 class="modal-title" id="modalTitle">Borrowed By:</h5>
         <button type="button" class="close btn-sm form-control-sm mb-2" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <table class="table table-bordered guard-datatable table-sm table-striped" width="80%">
-                  <thead>
+        <table class="table table-bordered borrow-datatable table-sm table-striped" width="80%">
+                  <thead class="thead-light">
                       <tr>
                         <th>No</th>
                         <th>Id</th>
@@ -58,14 +60,14 @@
     <div class="row justify-content-end">
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header">{{ __('Books') }}</div>
+                <div class="card-header">{{ __('Copy Issue') }}</div>
 
                 <div class="card-body">
                     <form id="reg_form">
                         @csrf
 
                         <div class="form-group row">
-                            <label for="id" class="col-md-4 col-form-label text-md-right">{{ __('Id') }}</label>
+                            <label for="id" class="col-md-4 col-form-label text-md-right">{{ __('Copy Id') }}</label>
 
                             <div class="col-md-6">
                                 <input id="id" type="text" class="form-control form-control-sm input-sm @error('id') is-invalid @enderror" name="id" value="{{ old('id') }}" required autocomplete="id" autofocus>
@@ -159,6 +161,20 @@
                               </div>
                             </div>
 
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="sid" class="col-md-4 col-form-label text-md-right"><a href="#" style="color:blue" onClick="adjust()" data-toggle="modal" data-target="#CatModal">{{__('Category')}}</a></label>
+
+                            <div class="col-md-6">
+                                <input id="category" type="text" class="form-control form-control-sm input-sm @error('category') is-invalid @enderror" name="category" value="{{ old('category') }}" required autocomplete="category" autofocus>
+
+                                @error('category')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
                         </div>
 
                         <div class="form-group row mb-0">
@@ -267,6 +283,9 @@
                       return false;
                     }
 
+                    function viewStudents(row){
+                      alert(row.students[0].id);
+                    }
                     function viewBook(event){
                       event.preventDefault();
                       var id = $(event.target).text();
@@ -282,6 +301,7 @@
                             $('#subject').val(response.subject_id);
                             $('#worth').val(response.worth);
                             $('#currency').val(response.currency_id);
+                            $('#category').val(response.category);
 
                             $('#reg_form input').attr("readonly",true);
                             $('#submit').attr("disabled",true);
@@ -291,6 +311,18 @@
                           }
                       });
                       return false;
+                    }
+
+                    function showBorrowers(student_list){
+                        $('.borrow-datatable > tbody > tr').remove();
+                      curr_obj_rows = 0;
+                      student_list.forEach((student) => {
+
+                        var obj_line =  '<tr><td>'+(++curr_obj_rows)+'</td><td>'+student.id+'</td>' +'<td>'+student.name+'</td>' +'<td>'+student.last_name+'</td></tr>'
+
+                        $('.borrow-datatable tbody').append(obj_line);
+                      });
+
                     }
 
                     $(document).ready(function(){
@@ -333,41 +365,38 @@
                          var table = $('.yajra-datatable').DataTable({
                              processing: true,
                              serverSide: true,
-                             ajax: "{{ route('books.list') }}",
+                             ajax: "{{ route('issues.list') }}",
+                             columnDefs:[
+                               {visible:false,targets:[6]},
+                             ],
                              columns: [
                                  {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                                  {data: function(row){
-                                   return '<a href="#" onClick="viewBook(event)" style="color:black">'+row.id+'</a>';
+                                   return '<a href="#" onClick="viewIssue(event)" style="color:black">'+row.id+'</a>';
                                  }, name: 'id'},
-                                 {data: 'title', name: 'title'},
-                                 {data: 'subject_id', name: 'subject_id'},
+                                 {data: 'copy.book.id', name: 'copy.book.id'},
+                                 {data: 'copy_id', name: 'copy_id'},
+                                 {data: function(row){
+                                   if(row.students.length>1){
+
+                                     return '<a href="#" data-toggle="modal" data-target="#StudentModal" style="color:black">'+"Group"+'</a>'
+                                   }
+                                   else{
+                                     return '<a href="#" data-toggle="modal" data-target="#StudentModal" style="color:black">'+row.students[0].id+'</a>'
+                                   }
+                                 }, name: 'student_id'},
+                                 {data: 'date', name: 'date'},
+                                 {data: 'students', name: 'students'},
                              ]
+                         });
+
+                         $('.yajra-datatable tbody').on('click','td',function(){
+                           student_list = table.cell(this,6).data();
+                           showBorrowers(student_list);
                          });
 
                        });
 
-                       $(function () {
-
-                            tableGuard = $('.guard-datatable').DataTable({
-                            processing: true,
-                            serverSide: true,
-                            scrollY:        "150px",
-                            scrollX:        true,
-                            scrollCollapse: true,
-                            paging:         false,
-                            ajax: "{{ route('guardians/list') }}",
-                            columns: [
-                                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                                {data: function(row){
-                                  return '<a href="#" onClick="selectGuard(event)" data-dismiss="modal" style="color:black">'+row.id+'</a>';
-                                }, name: 'id'},
-                                {data: 'last_name', name: 'last_name'},
-                                {data: 'name', name: 'name'},
-
-                            ]
-                        });
-
-                      });
                     });
                     </script>
                 </div>

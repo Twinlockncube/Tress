@@ -19,4 +19,11 @@ class Book extends Model
                 'currency_id',
                 'category',
               ];
+    public function copies(){
+      return $this->hasMany(Copy::class);
+    }
+
+    public function issues(){
+      return $this->hasManyThrough(Issue::class,Copy::class);
+    }
 }

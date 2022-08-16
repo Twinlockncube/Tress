@@ -5,7 +5,7 @@
 
         <div id="resultLinks">
           <table class="table table-bordered expenses-datatable table-sm table-striped">
-                    <thead>
+                    <thead class="thead-dark">
                         <tr>
                             <th>No</th>
                             <th>Batch_no</th>

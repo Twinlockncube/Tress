@@ -508,7 +508,12 @@ td.storyLeft{
 	border: 1px;
 }
 
-/**************** Home resultPane *****************/
+/****************  ResultLinks *****************/
+#resultLinks{
+	overflow: auto;
+}
+
+/****************  ResultPane *****************/
 #resultPane{
 	position:fixed;
 	margin-top: 6px;

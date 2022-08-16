@@ -17,48 +17,21 @@ use App\Models\Sequence;
 use App\Models\Payment;
 use App\Models\Currency;
 use App\Models\Batch;
+use App\Models\Copy;
+use App\Models\Issue;
 use Auth;
 use DataTables;
 use Carbon\Carbon;
 
 class TestController extends Controller
 {
-
-  public function payment_no($string){
-    $length = 4;
-    $postfix = str_pad($string,$length,"0", STR_PAD_LEFT);
-    $prefix = substr(date('Y'),2);
-    return $prefix."PAY".$postfix;
-  }
-
-  public function batch_no(Sequence $seq){
-    $length = 4;
-    $string = $seq->payment_batch_seq + 1;
-    $postfix = str_pad($string,$length,"0", STR_PAD_LEFT);
-    $prefix = substr(date('Y'),2);
-    return $prefix."BAT".$postfix;
-  }
-
   public function theTest(Request $request){
-    $seq = Sequence::find(1);
-    $pay_count = $seq->payment_seq;
-    //$id = $request->input('id');
-    $id = "22BAT0007";
-    $description = $request->input('description');
+   $last_issue = Copy::find('ETF01')->last_issue()->with('students')->get();
+   $last_issue = $last_issue[0];
 
-    $rev_payments = array();
+   $copy = Copy::where('id','=','ETF01')->with('book')->get();
+   return $copy;
 
-    $batch = Batch::find($id)->payments;
-    /*$rev_batch = $batch->replicate();
-    $rev_batch->id = $this->batch_no($seq);
-    $rev_batch->date = Carbon::now()->toDateTimeString();
-    $rev_batch->reference_no = $id;
-    $rev_batch->description = $description;
-    $rev_batch->sponsor_id =$batch->sponsor_id;
-    $rev_batch->type =(int)(!((bool)($batch->type)));
-    $rev_batch->user_id=Auth::user()->id;*/
-
-    return $batch;
    }
          //}
 

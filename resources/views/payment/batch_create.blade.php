@@ -98,7 +98,7 @@
     @csrf
  <div class="listing">
 	<table class="table table-editable table-striped table-sm payment-datatable">
-    <thead>
+    <thead class="thead-dark">
       <tr>
   		    <th>#</th>
           <th>Student Number</th>

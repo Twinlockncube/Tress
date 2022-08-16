@@ -21,7 +21,6 @@ class CreateBooksTable extends Migration
             $table->string('subject_id');
             $table->decimal('worth',15,2)->nullable();
             $table->string('currency_id')->nullable();
-            $table->string('category');
             $table->timestamps();
         });
     }
