@@ -22,4 +22,12 @@ class IssueController extends Controller
            ->make(true);
          }
     }
+
+    public function view(Request $request){
+        $id = $request->input('id');
+        $issue = Issue::where('id','=',$id)->with('copy',function($query){
+          return $query->with('book');
+        })->first();
+        return response()->json($issue);
+    }
 }

@@ -126,13 +126,12 @@
                       <label for="address" class="col-md-4 col-form-label text-md-right">{{ __('Return Status') }}</label>
 
                       <div class="col-md-6">
-                          <input id="edition" type="text" class="form-control form-control-sm input-sm @error('edition') is-invalid @enderror" name="edition" value="{{ old('edition') }}" required autocomplete="edition" autofocus>
-
-                          @error('edition')
-                              <span class="invalid-feedback" role="alert">
-                                  <strong>{{ $message }}</strong>
-                              </span>
-                          @enderror
+                        <select id="status" class="form-control form-control-sm">
+                          <option value="0">Not Applicable</option>
+                          <option value="1">Fully Returned</option>
+                          <option value="2">Partially Returned</option>
+                          <option value="3">Not Returned</option>
+                        </select>
                       </div>
                   </div>
 
@@ -242,25 +241,28 @@
                 return false;
               }
 
-              function viewStudents(row){
-                alert(row.students[0].id);
-              }
-              function viewBook(event){
+
+              function viewIssue(event){
                 event.preventDefault();
                 var id = $(event.target).text();
                 $.ajax({
                     type:'get',
-                    url:"{{route('books.view')}}",
+                    url:"{{route('issues.view')}}",
                     data:{id:id},
                     success: function(response){
                       $('#id').val(response.id);
-                      $('#author').val(response.author);
-                      $('#title').val(response.title);
-                      $('#edition').val(response.edition);
-                      $('#subject').val(response.subject_id);
-                      $('#worth').val(response.worth);
-                      $('#currency').val(response.currency_id);
-                      $('#category').val(response.category);
+                      $('#copy_id').val(response.copy_id);
+                      $('#title').val(response.copy.book.title);
+                      $('#date').val(response.date);
+                      if(response.status==1){
+                        $('#status').val("1");
+                      }
+                      else if(response.status==2){
+                        $('#status').val("2");
+                      }
+                      else{
+                        $('#status').val("3");
+                      }
 
                       $('#reg_form input').attr("readonly",true);
                       $('#submit').attr("disabled",true);

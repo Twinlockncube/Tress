@@ -80,6 +80,7 @@ Route::group(['middleware' => ['auth']], function() {
     //Issues Routes
     Route::get('issues/index', [App\Http\Controllers\IssueController::class, 'index'])->name('issues.index');
     Route::get('issues/list', [App\Http\Controllers\IssueController::class, 'list'])->name('issues.list');
+    Route::get('issues/view', [App\Http\Controllers\IssueController::class, 'view'])->name('issues.view');
 
     //Receipt Routes
     Route::get('receipt/index', [App\Http\Controllers\ReceiptController::class, 'index'])->name('receipts.index');
