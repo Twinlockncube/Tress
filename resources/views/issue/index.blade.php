@@ -265,6 +265,7 @@
                       }
 
                       $('#reg_form input').attr("readonly",true);
+                      $('#reg_form select').attr("disabled",true);
                       $('#submit').attr("disabled",true);
                     },
                     error: function(resp){
@@ -338,17 +339,8 @@
                            {data: 'copy.book.id', name: 'copy.book.id'},
                            {data: 'copy_id', name: 'copy_id'},
                            {data: function(row){
-                             if(row.students.length==1){
-                               return '<a href="#" data-toggle="modal" data-target="#StudentModal" style="color:black">'+row.students[0].id+'</a>'
-                             }
-                             if(row.students.length>1){
-
-                               return '<a href="#" data-toggle="modal" data-target="#StudentModal" style="color:black">'+"Group"+'</a>'
-                             }
-                             else{
-                               return '<a href="#" data-toggle="modal" data-target="#StudentModal" style="color:black">'+"Nil"+'</a>'
-                             }
-                           }, name: 'student_id'},
+                             return '<a href="#" data-toggle="modal" data-target="#StudentModal" style="color:black">'+row.borrower+'</a>'
+                           } , name: 'borrower'},
                            {data: 'date', name: 'date'},
                            {data: 'students', name: 'students'},
                        ]

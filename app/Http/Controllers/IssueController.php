@@ -19,6 +19,16 @@ class IssueController extends Controller
        })->with('students')->get();
        return Datatables::of($data)
            ->addIndexColumn()
+           ->addColumn('borrower',function(Issue $issue){
+             $borrower = "Nill";
+             if(count($issue->students)===1){
+               $borrower = $issue->students[0]->id;
+             }
+             else if(count($issue->students)>1){
+               $borrower ="Group";
+             }
+            return $borrower;
+           })
            ->make(true);
          }
     }
