@@ -81,7 +81,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('issues/index', [App\Http\Controllers\IssueController::class, 'index'])->name('issues.index');
     Route::get('issues/list', [App\Http\Controllers\IssueController::class, 'list'])->name('issues.list');
     Route::get('issues/view', [App\Http\Controllers\IssueController::class, 'view'])->name('issues.view');
-
+    Route::post('issues/create', [App\Http\Controllers\IssueController::class, 'create'])->name('issues.create');
+    Route::delete('issues/delete', [App\Http\Controllers\IssueController::class, 'delete'])->name('issues.delete');
     //Receipt Routes
     Route::get('receipt/index', [App\Http\Controllers\ReceiptController::class, 'index'])->name('receipts.index');
 

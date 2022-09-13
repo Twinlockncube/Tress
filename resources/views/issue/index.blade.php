@@ -135,6 +135,20 @@
                       </div>
                   </div>
 
+                  <div class="form-group row">
+                      <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Student(s)') }}</label>
+
+                      <div class="col-md-6">
+                          <input id="students" type="text" class="form-control form-control-sm input-sm @error('title') is-invalid @enderror" name="students" value="{{ old('students') }}" required autocomplete="students" autofocus>
+
+                          @error('students')
+                              <span class="invalid-feedback" role="alert">
+                                  <strong>{{ $message }}</strong>
+                              </span>
+                          @enderror
+                      </div>
+                  </div>
+
                   <div class="form-group row mb-0">
                       <div class="col-md-6 offset-md-4">
                           <button type="submit" class="btn btn-dark btn-inline btn-sm" id="submit" disabled="true">
@@ -147,7 +161,7 @@
                               {{ __('New') }}
                           </button>
 
-                          <button class="btn  btn-outline-danger" id="deleter" onClick="deleteBook(event)">
+                          <button class="btn  btn-outline-danger" id="deleter" onClick="deleteIssue(event)">
                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                                 <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
@@ -165,14 +179,15 @@
               <script>
               var new_entry = false;
               var tableGuard;
-              function registerBook(){
+              function registerIssue(){
                 $.ajax({
                     type:'post',
-                    url:"{{route('books.create')}}",
+                    url:"{{route('issues.create')}}",
                     data:$('form').serialize(),
                     success: function(response){
                       $('.yajra-datatable').DataTable().ajax.reload();
-                      swal('Tress','Student Captured Successfully','success');
+                      $('#id').val(response.id);
+                      swal('Tress','Issue Captured Successfully','success');
                     },
                     error: function(resp){
                       swal('Tress',resp.msg,'error');
@@ -206,7 +221,7 @@
                 });
               }
 
-              function deleteBook(event){
+              function deleteIssue(event){
                 event.preventDefault();
                 var id = $('#id').val();
                 swal({
@@ -219,9 +234,9 @@
                     .then((willDelete) => {
                       if (willDelete) {
                         $.ajax({
-                          type: 'get',
-                          url: "{{route('books.delete')}}",
-                          data:{id:id},
+                          type: 'delete',
+                          url: "{{route('issues.delete')}}",
+                          data:{"_token":"{{csrf_token()}}",id:id},
                           success: function(response){
                             $('.yajra-datatable').DataTable().ajax.reload();
                             swal('Tress',response.msg,'success');
@@ -292,10 +307,10 @@
                   $('#submit').click(function(event){
                       event.preventDefault();
                       if(new_entry){
-                        registerBook();
+                        registerIssue();
                       }
                       else{
-                        updateBook();
+                        updateIssue();
                       }
                       $('#submit').attr("disabled",true);
                   });
