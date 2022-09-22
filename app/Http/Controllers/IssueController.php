@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Issue;
+use App\Models\Copy;
 use App\Models\Sequence;
 use DataTables;
+use DB;
 
 class IssueController extends Controller
 {
@@ -54,15 +56,19 @@ class IssueController extends Controller
       if($request->ajax()){
         $students = explode(',',$request->get('students'));
          $seq = Sequence::find(1);
+         $copy = Copy::find($request->get('copy_id'));
          $issue = new Issue([
           'id' => $this->issueNumber($seq),
           'copy_id' => $request->get('copy_id'),
           'date' => $request->get('date'),
           'status' => 1,
         ]);
-        //$issue->save();
-        $issue->students()->sync($students);
-        $seq->update(['issue_seq'=> $seq->issue_seq+1]);
+
+        DB::transaction(function() use ($issue,$students,$seq,$copy){
+          $issue->students()->sync($students);
+          $seq->update(['issue_seq'=> $seq->issue_seq+1]);
+          $copy->update(['availability' => 0]);
+        });
         return response()->json($issue);
       }
 
@@ -74,4 +80,16 @@ class IssueController extends Controller
         $issue->delete();
         return response()->json(array('msg'=>"Issue Deleted Successfully"));
    }
+
+   public function update(Request $request){
+     $id = $request->input('id');
+     $students = explode(',',$request->get('students'));
+     $issue = Issue::where('id','=',$id)->first();
+     $issue->update([
+      'date' => $request->get('date'),
+    ]);
+    $issue->students()->sync($students);
+     return response()->json(['msg'=>"Edited Successfully"]);
+   }
+
 }

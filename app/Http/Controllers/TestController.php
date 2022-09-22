@@ -26,10 +26,11 @@ use Carbon\Carbon;
 class TestController extends Controller
 {
   public function theTest(Request $request){
-   $last_issue = Copy::find('ETF01')->last_issue()->with('students')->get();
-   $last_issue = $last_issue[0];
+   //$last_issue = Copy::find('ETF01')->last_issue()->with('students')->get();
+  // $last_issue = $last_issue[0];
 
-   $copy = Copy::where('id','=','ETF01')->with('book')->get();
+   //$copy = Copy::where('id','=','ETF01')->with('book')->get();
+   $copy = Copy::find('CP001');
    return $copy;
 
    }

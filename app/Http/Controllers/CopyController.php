@@ -20,4 +20,10 @@ class CopyController extends Controller
            ->make(true);
          }
     }
+
+    public function availability(Request $request){
+         $copy_id = $request->get('id');
+         $copy = Copy::find($copy_id);
+         return response()->json($copy);
+    }
 }

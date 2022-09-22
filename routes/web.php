@@ -76,6 +76,7 @@ Route::group(['middleware' => ['auth']], function() {
     //Copies Routes
     Route::get('copies/index', [App\Http\Controllers\CopyController::class, 'index'])->name('copies.index');
     Route::get('copies/list', [App\Http\Controllers\CopyController::class, 'list'])->name('copies.list');
+    Route::get('copies/availability', [App\Http\Controllers\CopyController::class, 'availability'])->name('copies.availability');
 
     //Issues Routes
     Route::get('issues/index', [App\Http\Controllers\IssueController::class, 'index'])->name('issues.index');
@@ -83,6 +84,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('issues/view', [App\Http\Controllers\IssueController::class, 'view'])->name('issues.view');
     Route::post('issues/create', [App\Http\Controllers\IssueController::class, 'create'])->name('issues.create');
     Route::delete('issues/delete', [App\Http\Controllers\IssueController::class, 'delete'])->name('issues.delete');
+    Route::post('issues/update', [App\Http\Controllers\IssueController::class, 'update'])->name('issues.update');
     //Receipt Routes
     Route::get('receipt/index', [App\Http\Controllers\ReceiptController::class, 'index'])->name('receipts.index');
 

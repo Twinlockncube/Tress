@@ -84,7 +84,7 @@
                       <label for="copy_id" class="col-md-4 col-form-label text-md-right">{{ __('Copy Id') }}</label>
 
                       <div class="col-md-6">
-                          <input id="copy_id" type="text" class="form-control form-control-sm input-sm @error('id') is-invalid @enderror" name="copy_id" value="{{ old('copy_id') }}" required autocomplete="copy_id" autofocus>
+                          <input id="copy_id" type="text" class="form-control form-control-sm input-sm @error('copy_id') is-invalid @enderror" name="copy_id" value="{{ old('copy_id') }}" required autocomplete="copy_id" autofocus>
 
                           @error('copy_id')
                               <span class="invalid-feedback" role="alert">
@@ -206,10 +206,10 @@
                 return false;
               }
 
-              function updateBook(){
+              function updateIssue(){
                 $.ajax({
                     type:'post',
-                    url:"{{route('books.update')}}",
+                    url:"{{route('issues.update')}}",
                     data:$('form').serialize(),
                     success: function(response){
                       $('.yajra-datatable').DataTable().ajax.reload();
@@ -256,6 +256,30 @@
                 return false;
               }
 
+              function checkAvailability(){
+                var id = $('#copy_id').val();
+                $.ajax({
+                    type:'get',
+                    url:"{{route('copies.availability')}}",
+                    data:{id:id},
+                    success: function(response){
+                      if($.isEmptyObject(response)){
+                        $('#copy_id').val('');
+                        swal('Tress','Copy does not exist','warning');
+                      }
+                      else if(response.availability==0){
+                        swal('Tress','Chosen book copy unavailable','warning');
+                      }
+                      else{
+                        $('#title').val(response.description);
+                      }
+                    },
+                    error: function(resp){
+                      alert(resp.msg);
+                    }
+                });
+                return false;
+              }
 
               function viewIssue(event){
                 event.preventDefault();
@@ -303,7 +327,13 @@
               }
 
               $(document).ready(function(){
+
+                  $('#copy_id').on('blur',function(){
+                    checkAvailability();
+                  });
+
                   $('#reg_form input').attr("readonly",true);
+                  $('#reg_form select').attr("disabled",true);
                   $('#submit').click(function(event){
                       event.preventDefault();
                       if(new_entry){
@@ -327,7 +357,7 @@
                   $('#new').click(function(event){
                       event.preventDefault();
                       new_entry = true;
-                      $('#reg_form input').attr("readonly",false);
+                      $('#reg_form input').not('#title').attr("readonly",false);
                       $('#reg_form')[0].reset();
                       $('#last_name').focus();
                       $('#submit').attr("disabled",false);
