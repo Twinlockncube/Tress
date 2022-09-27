@@ -13,7 +13,9 @@
                       <th>Book_Copy</th>
                       <th>Student</th>
                       <th>Date_Received</th>
+                      <th>status</th>
                       <th>Details</th>
+                      <th>Student_list</th>
                   </tr>
               </thead>
               <tbody>
@@ -268,6 +270,7 @@
                         swal('Tress','Copy does not exist','warning');
                       }
                       else if(response.availability==0){
+                        $('#copy_id').val('');
                         swal('Tress','Chosen book copy unavailable','warning');
                       }
                       else{
@@ -303,6 +306,18 @@
                         $('#status').val("3");
                       }
 
+                      let borrower_list = "";
+                      let first_pass = true;
+                      $.each(response.students,function(){
+                        if(first_pass){
+                          borrower_list+=this.id;
+                          first_pass = false
+                        }
+                        else{
+                          borrower_list+=","+this.id;
+                        }
+                      });
+                      $('#students').val(borrower_list);
                       $('#reg_form input').attr("readonly",true);
                       $('#reg_form select').attr("disabled",true);
                       $('#submit').attr("disabled",true);
@@ -374,7 +389,8 @@
                        serverSide: true,
                        ajax: "{{ route('issues.list') }}",
                        columnDefs:[
-                         {visible:false,targets:[6]},
+                         {visible:false,targets:[7]},
+                         {visible:false,searchable:true,targets:[8]},
                        ],
                        columns: [
                            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
@@ -387,12 +403,14 @@
                              return '<a href="#" data-toggle="modal" data-target="#StudentModal" style="color:black">'+row.borrower+'</a>'
                            } , name: 'borrower'},
                            {data: 'date', name: 'date'},
+                           {data:'return_status',  name: 'return_status'},
                            {data: 'students', name: 'students'},
+                           {data: 'student_list', name: 'student_list'},
                        ]
                    });
 
                    $('.yajra-datatable tbody').on('click','td',function(){
-                     student_list = table.cell(this,6).data();
+                     student_list = table.cell(this,7).data();
                      showBorrowers(student_list);
                    });
 

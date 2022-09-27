@@ -32,6 +32,30 @@ class IssueController extends Controller
              }
             return $borrower;
            })
+           ->addColumn('student_list',function(Issue $issue){
+             $student_list = "";
+             if(count($issue->students)===1){
+               $student_list = $issue->students[0]->id;
+             }
+             else if(count($issue->students)>1){
+               foreach($issue->students as $student)
+               $student_list =$student_list.$student->id;
+             }
+            return $student_list;
+           })
+           ->addColumn('return_status',function(Issue $issue){
+             $return_status = "";
+             if($issue->status==1){
+               $return_status = "Not_Returned";
+             }
+             else if($issue->status==2){
+               $return_status = "Partially_Returned";
+             }
+             else{
+               $return_status = "Fully_Returned";
+             }
+            return $return_status;
+           })
            ->make(true);
          }
     }
@@ -40,7 +64,7 @@ class IssueController extends Controller
         $id = $request->input('id');
         $issue = Issue::where('id','=',$id)->with('copy',function($query){
           return $query->with('book');
-        })->first();
+        })->with('students')->first();
         return response()->json($issue);
     }
 
