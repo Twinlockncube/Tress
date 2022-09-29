@@ -65,7 +65,7 @@
                         @csrf
 
                         <div class="form-group row">
-                            <label for="id" class="col-md-4 col-form-label text-md-right">{{ __('Copy Id') }}</label>
+                            <label for="id" class="col-md-4 col-form-label text-md-right">{{ __('Id') }}</label>
 
                             <div class="col-md-6">
                                 <input id="id" type="text" class="form-control form-control-sm input-sm @error('id') is-invalid @enderror" name="id" value="{{ old('id') }}" required autocomplete="id" autofocus>
@@ -93,20 +93,6 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="address" class="col-md-4 col-form-label text-md-right">{{ __('Description') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="description" type="text" class="form-control form-control-sm input-sm @error('description') is-invalid @enderror" name="description" value="{{ old('description') }}" required autocomplete="description" autofocus>
-
-                                @error('description')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
                             <label for="address" class="col-md-4 col-form-label text-md-right">{{ __('State') }}</label>
 
                             <div class="col-md-6">
@@ -120,6 +106,21 @@
                             </div>
                         </div>
 
+
+                        <div class="form-group row">
+                            <label for="availability" class="col-md-4 col-form-label text-md-right">{{__('Available')}}</label>
+
+                                <div class="col-md-6">
+                                  <input id="availability" type="text" class="form-control form-control-sm input-sm @error('availability') is-invalid @enderror" name="availability" value="{{ old('category') }}" required autocomplete="availability" autofocus>
+
+                                     @error('availability')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                      @enderror
+                               </div>
+                          </div>
+
                         <div class="form-group row">
                             <label for="location_id" class="col-md-4 col-form-label text-md-right">{{ __('Location') }}</label>
 
@@ -127,20 +128,6 @@
                                 <input id="location_id" type="text" class="form-control form-control-sm input-sm @error('location_id') is-invalid @enderror" name="location_id" value="{{ old('location_id') }}" required autocomplete="location_id" autofocus>
 
                                 @error('location_id')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="category" class="col-md-4 col-form-label text-md-right"><a href="#" style="color:blue" onClick="adjust()" data-toggle="modal" data-target="#CatModal">{{__('Category')}}</a></label>
-
-                            <div class="col-md-6">
-                                <input id="category" type="text" class="form-control form-control-sm input-sm @error('category') is-invalid @enderror" name="category" value="{{ old('category') }}" required autocomplete="category" autofocus>
-
-                                @error('category')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -178,14 +165,14 @@
                     <script>
                     var new_entry = false;
                     var tableGuard;
-                    function registerBook(){
+                    function registerCopy(){
                       $.ajax({
                           type:'post',
-                          url:"{{route('books.create')}}",
+                          url:"{{route('copies.create')}}",
                           data:$('form').serialize(),
                           success: function(response){
                             $('.yajra-datatable').DataTable().ajax.reload();
-                            swal('Tress','Student Captured Successfully','success');
+                            swal('Tress',"Copies Created Successfully",'success');
                           },
                           error: function(resp){
                             swal('Tress',resp.msg,'error');
@@ -254,23 +241,34 @@
                       return false;
                     }
 
-                    function viewBook(event){
+                    function viewCopy(event){
                       event.preventDefault();
                       var id = $(event.target).text();
                       $.ajax({
                           type:'get',
-                          url:"{{route('books.view')}}",
+                          url:"{{route('copies.view')}}",
                           data:{id:id},
                           success: function(response){
                             $('#id').val(response.id);
                             $('#book_id').val(response.book_id);
                             $('#title').val(response.title);
                             $('#state').val(response.state);
-                            $('#subject').val(response.subject_id);
-                            $('#worth').val(response.worth);
-                            $('#currency').val(response.currency_id);
-                            $('#category').val(response.category);
+                            if(response.availability==0){
+                              $('#availability').val("No");
+                            }
+                            else{
+                              $('#availability').val("Yes");
+                            }
 
+                            if(response.state==1){
+                              $('#location_id').val("Torn");
+                            }
+                            else if(response.state==2){
+                              $('#location_id').val("Intact");
+                            }
+                            else{
+                              $('#location_id').val("Unknown");
+                            }
                             $('#reg_form input').attr("readonly",true);
                             $('#submit').attr("disabled",true);
                           },
@@ -286,7 +284,7 @@
                         $('#submit').click(function(event){
                             event.preventDefault();
                             if(new_entry){
-                              registerBook();
+                              registerCopy();
                             }
                             else{
                               updateBook();
@@ -327,8 +325,8 @@
                                  {data: function(row){
                                    return '<a href="#" onClick="viewCopy(event)" style="color:black">'+row.id+'</a>';
                                  }, name: 'id'},
-                                 {data: 'book.title', name: 'title'},
-                                 {data: 'book.subject_id', name: 'subject_id'},
+                                 {data: 'book.title', name: 'book.title'},
+                                 {data: 'book.subject_id', name: 'book.subject_id'},
                              ]
                          });
 

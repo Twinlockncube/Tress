@@ -5,13 +5,12 @@
 
         <div id="resultLinks">
           <table class="table table-bordered yajra-datatable table-sm table-striped">
-                    <thead>
+                    <thead class="thead-dark">
                         <tr>
                             <th>No</th>
                             <th>Id</th>
                             <th>Title</th>
                             <th>Subject</th>
-
                         </tr>
                     </thead>
                     <tbody>

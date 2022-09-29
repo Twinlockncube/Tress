@@ -13,7 +13,7 @@
                       <th>Book_Copy</th>
                       <th>Student</th>
                       <th>Date_Received</th>
-                      <th>status</th>
+                      <th>Status</th>
                       <th>Details</th>
                       <th>Student_list</th>
                   </tr>
@@ -274,7 +274,7 @@
                         swal('Tress','Chosen book copy unavailable','warning');
                       }
                       else{
-                        $('#title').val(response.description);
+                        $('#title').val(response.book.title);
                       }
                     },
                     error: function(resp){

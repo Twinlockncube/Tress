@@ -12,7 +12,6 @@ class Copy extends Model
     protected $fillable = [
       'id',
       'book_id',
-      'description',
       'state',
       'availability',
       'location_id',

@@ -17,7 +17,6 @@ class Book extends Model
                 'subject_id',
                 'worth',
                 'currency_id',
-                'category',
               ];
     public function copies(){
       return $this->hasMany(Copy::class);

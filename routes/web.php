@@ -77,6 +77,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('copies/index', [App\Http\Controllers\CopyController::class, 'index'])->name('copies.index');
     Route::get('copies/list', [App\Http\Controllers\CopyController::class, 'list'])->name('copies.list');
     Route::get('copies/availability', [App\Http\Controllers\CopyController::class, 'availability'])->name('copies.availability');
+    Route::post('copies/create', [App\Http\Controllers\CopyController::class, 'create'])->name('copies.create');
+    Route::get('copies/view', [App\Http\Controllers\CopyController::class, 'view'])->name('copies.view');
 
     //Issues Routes
     Route::get('issues/index', [App\Http\Controllers\IssueController::class, 'index'])->name('issues.index');
