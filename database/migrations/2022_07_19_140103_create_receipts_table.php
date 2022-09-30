@@ -14,7 +14,9 @@ class CreateReceiptsTable extends Migration
     public function up()
     {
         Schema::create('receipts', function (Blueprint $table) {
-            $table->id();
+            $table->string('id')->primary();
+            $table->string('issue_id')->unique();
+            $table->date('date');
             $table->timestamps();
         });
     }

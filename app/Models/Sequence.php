@@ -20,5 +20,6 @@ class Sequence extends Model
         'payment_batch_seq',
         'sponsor_seq',
         'guardian_seq',
+        'receipt_seq',
     ];
 }

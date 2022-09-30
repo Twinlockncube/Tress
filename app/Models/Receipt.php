@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Receipt extends Model
 {
     use HasFactory;
+    public $incrementing = false;
+    protected $fillable = [
+      'id',
+      'issue_id',
+      'date',
+    ];
 }

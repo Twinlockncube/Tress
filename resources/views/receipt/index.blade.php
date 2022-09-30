@@ -9,8 +9,8 @@
                         <tr>
                             <th>No</th>
                             <th>Id</th>
-                            <th>Title</th>
-                            <th>Subject</th>
+                            <th>Issue_id</th>
+                            <th>Return_Date</th>
 
                         </tr>
                     </thead>
@@ -79,12 +79,12 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Author') }}</label>
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Issue Id') }}</label>
 
                             <div class="col-md-6">
-                                <input id="author" type="text" class="form-control form-control-sm input-sm @error('author') is-invalid @enderror" name="author" value="{{ old('author') }}" required autocomplete="author" autofocus>
+                                <input id="issue_id" type="text" class="form-control form-control-sm input-sm @error('issue_id') is-invalid @enderror" name="issue_id" value="{{ old('issue_id') }}" required autocomplete="issue_id" autofocus>
 
-                                @error('author')
+                                @error('issue_id')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -93,12 +93,12 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="address" class="col-md-4 col-form-label text-md-right">{{ __('Title') }}</label>
+                            <label for="address" class="col-md-4 col-form-label text-md-right">{{ __('Book Title') }}</label>
 
                             <div class="col-md-6">
-                                <input id="title" type="text" class="form-control form-control-sm input-sm @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" required autocomplete="title" autofocus>
+                                <input id="book_title" type="text" class="form-control form-control-sm input-sm @error('book_title') is-invalid @enderror" name="book_title" value="{{ old('book_title') }}" required autocomplete="book_title" autofocus>
 
-                                @error('title')
+                                @error('book_title')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -107,12 +107,12 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="address" class="col-md-4 col-form-label text-md-right">{{ __('Edition') }}</label>
+                            <label for="address" class="col-md-4 col-form-label text-md-right">{{ __('Date') }}</label>
 
                             <div class="col-md-6">
-                                <input id="edition" type="text" class="form-control form-control-sm input-sm @error('edition') is-invalid @enderror" name="edition" value="{{ old('edition') }}" required autocomplete="edition" autofocus>
+                                <input id="date" type="date" class="form-control form-control-sm input-sm @error('edition') is-invalid @enderror" name="date" value="{{ old('date') }}" required autocomplete="date" autofocus>
 
-                                @error('edition')
+                                @error('date')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -121,44 +121,17 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="dob" class="col-md-4 col-form-label text-md-right">{{ __('Subject') }}</label>
+                            <label for="dob" class="col-md-4 col-form-label text-md-right">{{ __('Location') }}</label>
 
                             <div class="col-md-6">
-                                <input id="subject" type="text" class="form-control form-control-sm input-sm @error('subject') is-invalid @enderror" name="subject" value="{{ old('subject') }}" required autocomplete="subject" autofocus>
+                                <input id="location" type="text" class="form-control form-control-sm input-sm @error('location') is-invalid @enderror" name="location" value="{{ old('location') }}" required autocomplete="location" autofocus>
 
-                                @error('subject')
+                                @error('location')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="dob" class="col-md-4 col-form-label text-md-right">{{ __('Value') }}</label>
-                            <div class="form-group row col-md-5 value">
-                              <div class="col-md-6">
-                                  <input id="worth" type="text" class="form-control form-control-sm input-sm @error('worth') is-invalid @enderror" name="worth" value="{{ old('worth') }}" placeholder="Amount" required autocomplete="worth" autofocus>
-
-                                  @error('worth')
-                                      <span class="invalid-feedback" role="alert">
-                                          <strong>{{ $message }}</strong>
-                                      </span>
-                                  @enderror
-                              </div>
-
-
-                              <div class="col-md-6">
-                                  <input id="currency" type="text" class="form-control form-control-sm input-sm @error('currency') is-invalid @enderror" placeholder="Currency" name="currency" value="{{ old('currency') }}" required autocomplete="currency" autofocus>
-
-                                  @error('currency')
-                                      <span class="invalid-feedback" role="alert">
-                                          <strong>{{ $message }}</strong>
-                                      </span>
-                                  @enderror
-                              </div>
-                            </div>
-
                         </div>
 
                         <div class="form-group row">
@@ -205,14 +178,15 @@
                     <script>
                     var new_entry = false;
                     var tableGuard;
-                    function registerBook(){
+                    function registerReceipt(){
                       $.ajax({
                           type:'post',
-                          url:"{{route('books.create')}}",
+                          url:"{{route('receipts.create')}}",
                           data:$('form').serialize(),
                           success: function(response){
                             $('.yajra-datatable').DataTable().ajax.reload();
-                            swal('Tress','Student Captured Successfully','success');
+                            $('#id').val(response.id);
+                            swal('Tress','Receipt Captured Successfully','success');
                           },
                           error: function(resp){
                             swal('Tress',resp.msg,'error');
@@ -313,7 +287,7 @@
                         $('#submit').click(function(event){
                             event.preventDefault();
                             if(new_entry){
-                              registerBook();
+                              registerReceipt();
                             }
                             else{
                               updateBook();
@@ -348,14 +322,14 @@
                          var table = $('.yajra-datatable').DataTable({
                              processing: true,
                              serverSide: true,
-                             ajax: "{{ route('books.list') }}",
+                             ajax: "{{ route('receipts.list') }}",
                              columns: [
                                  {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                                  {data: function(row){
                                    return '<a href="#" onClick="viewBook(event)" style="color:black">'+row.id+'</a>';
                                  }, name: 'id'},
-                                 {data: 'title', name: 'title'},
-                                 {data: 'subject_id', name: 'subject_id'},
+                                 {data: 'issue_id', name: 'issue_id'},
+                                 {data: 'date', name: 'date'},
                              ]
                          });
 
