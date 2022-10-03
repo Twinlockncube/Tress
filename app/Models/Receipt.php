@@ -14,4 +14,9 @@ class Receipt extends Model
       'issue_id',
       'date',
     ];
+
+    public function issue(){
+      return $this->belongsTo(Issue::class);
+    }
+
 }

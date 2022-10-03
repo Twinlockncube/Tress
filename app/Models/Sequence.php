@@ -21,5 +21,6 @@ class Sequence extends Model
         'sponsor_seq',
         'guardian_seq',
         'receipt_seq',
+        'issue_seq',
     ];
 }

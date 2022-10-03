@@ -91,6 +91,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('receipt/index', [App\Http\Controllers\ReceiptController::class, 'index'])->name('receipts.index');
     Route::get('receipt/list', [App\Http\Controllers\ReceiptController::class, 'list'])->name('receipts.list');
     Route::post('receipt/create', [App\Http\Controllers\ReceiptController::class, 'create'])->name('receipts.create');
+    Route::get('receipt/view', [App\Http\Controllers\ReceiptController::class, 'view'])->name('receipts.view');
 
 
     //Payment Routes

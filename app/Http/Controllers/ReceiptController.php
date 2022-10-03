@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Receipt;
 use App\Models\Sequence;
+use App\Models\Issue;
 use DataTables;
 use DB;
 class ReceiptController extends Controller
@@ -31,19 +32,35 @@ class ReceiptController extends Controller
       return "REC".$prefix.$postfix;
     }
     public function create(Request $request){
-      //if($request->ajax()){
+      if($request->ajax()){
+        $location = $request->get('location');
          $seq = Sequence::find(1);
          $receipt = new Receipt([
           'id' => $this->recNum($seq),
           'issue_id' => $request->get('issue_id'),
           'date' => $request->get('date'),
         ]);
-        DB::transaction(function() use ($receipt,$seq){
+
+        $issue = Issue::find($request->get('issue_id'));
+        $copy = $issue->copy;
+        DB::transaction(function() use ($receipt,$seq,$issue,$copy,$location){
+          $issue->update(['status'=> 1]);
+          $copy->update(['availability' => 1,'location_id'=> $location]);
           $seq->update(['receipt_seq'=> $seq->receipt_seq+1]);
           $receipt->save();
         });
         return response()->json($seq);
-      //}
+      }
 
+    }
+
+    public function view(Request $request){
+        $id = $request->input('id');
+        $receipt = Receipt::where('id','=',$id)->with('issue',function($query){
+          return $query->with('copy',function($copy){
+            return $copy->with('book');
+          });
+        })->first();
+        return response()->json($receipt);
     }
 }

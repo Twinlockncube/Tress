@@ -45,14 +45,11 @@ class IssueController extends Controller
            })
            ->addColumn('return_status',function(Issue $issue){
              $return_status = "";
-             if($issue->status==1){
+             if($issue->status==0){
                $return_status = "Not_Returned";
              }
-             else if($issue->status==2){
-               $return_status = "Partially_Returned";
-             }
              else{
-               $return_status = "Fully_Returned";
+               $return_status = "Returned";
              }
             return $return_status;
            })
@@ -85,13 +82,14 @@ class IssueController extends Controller
           'id' => $this->issueNumber($seq),
           'copy_id' => $request->get('copy_id'),
           'date' => $request->get('date'),
-          'status' => 1,
+          'status' => 0,
         ]);
 
         DB::transaction(function() use ($issue,$students,$seq,$copy){
           $issue->students()->sync($students);
           $seq->update(['issue_seq'=> $seq->issue_seq+1]);
           $copy->update(['availability' => 0]);
+          $issue->save();
         });
         return response()->json($issue);
       }

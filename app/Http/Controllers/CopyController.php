@@ -24,7 +24,7 @@ class CopyController extends Controller
 
     public function availability(Request $request){
          $copy_id = $request->get('id');
-         $copy = Copy::find($copy_id)->with('book')->first();
+         $copy = Copy::find($copy_id)===null? null:Copy::find($copy_id)->with('book')->first();
          return response()->json($copy);
     }
 

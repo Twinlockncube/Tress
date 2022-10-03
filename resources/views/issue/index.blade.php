@@ -129,10 +129,9 @@
 
                       <div class="col-md-6">
                         <select id="status" class="form-control form-control-sm">
-                          <option value="0">Not Applicable</option>
-                          <option value="1">Fully Returned</option>
-                          <option value="2">Partially Returned</option>
-                          <option value="3">Not Returned</option>
+                          <option value="n">Not Applicable</option>
+                          <option value="0">Not Returned</option>
+                          <option value="1">Returned</option>
                         </select>
                       </div>
                   </div>
@@ -277,8 +276,9 @@
                         $('#title').val(response.book.title);
                       }
                     },
-                    error: function(resp){
-                      alert(resp.msg);
+                    error: function(response){
+                      $('#copy_id').val('');
+                      swal('Tress',response.responseJSON.message,'error');
                     }
                 });
                 return false;
@@ -296,14 +296,14 @@
                       $('#copy_id').val(response.copy_id);
                       $('#title').val(response.copy.book.title);
                       $('#date').val(response.date);
-                      if(response.status==1){
+                      if(response.status==0){
+                        $('#status').val("0");
+                      }
+                      else if(response.status==1){
                         $('#status').val("1");
                       }
-                      else if(response.status==2){
-                        $('#status').val("2");
-                      }
                       else{
-                        $('#status').val("3");
+                        $('#status').val("n");
                       }
 
                       let borrower_list = "";
@@ -322,8 +322,8 @@
                       $('#reg_form select').attr("disabled",true);
                       $('#submit').attr("disabled",true);
                     },
-                    error: function(resp){
-                      alert(resp.msg);
+                    error: function(response){
+                      swal('Tress',response.responseJSONresp.message);
                     }
                 });
                 return false;

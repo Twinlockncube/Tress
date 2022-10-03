@@ -58,7 +58,7 @@
     <div class="row justify-content-end">
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header">{{ __('Books') }}</div>
+                <div class="card-header">{{ __('Copy Receipts') }}</div>
 
                 <div class="card-body">
                     <form id="reg_form">
@@ -127,20 +127,6 @@
                                 <input id="location" type="text" class="form-control form-control-sm input-sm @error('location') is-invalid @enderror" name="location" value="{{ old('location') }}" required autocomplete="location" autofocus>
 
                                 @error('location')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="sid" class="col-md-4 col-form-label text-md-right"><a href="#" style="color:blue" onClick="adjust()" data-toggle="modal" data-target="#CatModal">{{__('Category')}}</a></label>
-
-                            <div class="col-md-6">
-                                <input id="category" type="text" class="form-control form-control-sm input-sm @error('category') is-invalid @enderror" name="category" value="{{ old('category') }}" required autocomplete="category" autofocus>
-
-                                @error('category')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -255,28 +241,25 @@
                       return false;
                     }
 
-                    function viewBook(event){
+                    function viewReceipt(event){
                       event.preventDefault();
                       var id = $(event.target).text();
                       $.ajax({
                           type:'get',
-                          url:"{{route('books.view')}}",
+                          url:"{{route('receipts.view')}}",
                           data:{id:id},
                           success: function(response){
                             $('#id').val(response.id);
-                            $('#author').val(response.author);
-                            $('#title').val(response.title);
-                            $('#edition').val(response.edition);
-                            $('#subject').val(response.subject_id);
-                            $('#worth').val(response.worth);
-                            $('#currency').val(response.currency_id);
-                            $('#category').val(response.category);
+                            $('#issue_id').val(response.issue_id);
+                            $('#book_title').val(response.issue.copy.book.title);
+                            $('#date').val(response.date);
+                            $('#location').val(response.issue.copy.location_id);
 
                             $('#reg_form input').attr("readonly",true);
                             $('#submit').attr("disabled",true);
                           },
-                          error: function(resp){
-                            alert(resp.msg);
+                          error: function(response){
+                            alert(response.responseJSON.message);
                           }
                       });
                       return false;
@@ -326,7 +309,7 @@
                              columns: [
                                  {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                                  {data: function(row){
-                                   return '<a href="#" onClick="viewBook(event)" style="color:black">'+row.id+'</a>';
+                                   return '<a href="#" onClick="viewReceipt(event)" style="color:black">'+row.id+'</a>';
                                  }, name: 'id'},
                                  {data: 'issue_id', name: 'issue_id'},
                                  {data: 'date', name: 'date'},
