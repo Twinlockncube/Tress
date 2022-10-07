@@ -170,9 +170,15 @@
                           url:"{{route('receipts.create')}}",
                           data:$('form').serialize(),
                           success: function(response){
-                            $('.yajra-datatable').DataTable().ajax.reload();
-                            $('#id').val(response.id);
-                            swal('Tress','Receipt Captured Successfully','success');
+                            if(response.error===undefined){
+                              $('.yajra-datatable').DataTable().ajax.reload();
+                              $('#id').val(response.id);
+                              swal('Tress','Receipt Captured Successfully','success');
+                              $('#submit').attr("disabled",true);
+                            }
+                            else{
+                              swal('Tress',response.error,'error');
+                            }
                           },
                           error: function(resp){
                             swal('Tress',resp.msg,'error');
@@ -273,9 +279,8 @@
                               registerReceipt();
                             }
                             else{
-                              updateBook();
+                              updateReceipt();
                             }
-                            $('#submit').attr("disabled",true);
                         });
 
                         $('#edit').click(function(event){

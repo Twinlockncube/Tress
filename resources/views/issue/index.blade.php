@@ -186,12 +186,17 @@
                     url:"{{route('issues.create')}}",
                     data:$('form').serialize(),
                     success: function(response){
-                      $('.yajra-datatable').DataTable().ajax.reload();
-                      $('#id').val(response.id);
-                      swal('Tress','Issue Captured Successfully','success');
+                      if(response.error===undefined){
+                        $('.yajra-datatable').DataTable().ajax.reload();
+                        $('#id').val(response.id);
+                        swal('Tress','Issue Captured Successfully','success');
+                      }
+                      else{
+                        swal('Tress',response.error,'error');
+                      }
                     },
                     error: function(resp){
-                      swal('Tress',resp.msg,'error');
+                      swal('Tress',resp.responseJSON.message,'error');
                     }
                 });
               }

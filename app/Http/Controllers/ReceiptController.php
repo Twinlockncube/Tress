@@ -42,6 +42,12 @@ class ReceiptController extends Controller
         ]);
 
         $issue = Issue::find($request->get('issue_id'));
+        if($issue===null){
+          return response()->json(['error'=>'Issue '.$request->get('issue_id').' does not exist']);
+        }
+        if($issue->status==1){
+          return response()->json(['error'=>'Issue '.$request->get('issue_id').' already returned']);
+        }
         $copy = $issue->copy;
         DB::transaction(function() use ($receipt,$seq,$issue,$copy,$location){
           $issue->update(['status'=> 1]);
@@ -49,7 +55,7 @@ class ReceiptController extends Controller
           $seq->update(['receipt_seq'=> $seq->receipt_seq+1]);
           $receipt->save();
         });
-        return response()->json($seq);
+        return response()->json($receipt);
       }
 
     }

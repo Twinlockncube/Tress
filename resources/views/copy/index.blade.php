@@ -252,7 +252,7 @@
                             $('#id').val(response.id);
                             $('#book_id').val(response.book_id);
                             $('#title').val(response.title);
-                            $('#state').val(response.state);
+                            $('#location_id').val(response.location_id);
                             if(response.availability==0){
                               $('#availability').val("No");
                             }
@@ -261,13 +261,13 @@
                             }
 
                             if(response.state==1){
-                              $('#location_id').val("Torn");
+                              $('#state').val("Torn");
                             }
                             else if(response.state==2){
-                              $('#location_id').val("Intact");
+                              $('#state').val("Intact");
                             }
                             else{
-                              $('#location_id').val("Unknown");
+                              $('#state').val("Unknown");
                             }
                             $('#reg_form input').attr("readonly",true);
                             $('#submit').attr("disabled",true);

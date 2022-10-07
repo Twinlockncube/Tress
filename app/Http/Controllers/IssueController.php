@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Issue;
 use App\Models\Copy;
 use App\Models\Sequence;
+use App\Models\Student;
 use DataTables;
 use DB;
 
@@ -76,6 +77,15 @@ class IssueController extends Controller
     public function create(Request $request){
       if($request->ajax()){
         $students = explode(',',$request->get('students'));
+
+        /*****Validation***********************************/
+        foreach($students as $student){
+          if(Student::find($student)===null){
+            return response()->json(['msg'=>'Student '.$student.' does not exist']);
+          }
+        }
+        /*****End Validation***********************************/
+
          $seq = Sequence::find(1);
          $copy = Copy::find($request->get('copy_id'));
          $issue = new Issue([
@@ -88,7 +98,7 @@ class IssueController extends Controller
         DB::transaction(function() use ($issue,$students,$seq,$copy){
           $issue->students()->sync($students);
           $seq->update(['issue_seq'=> $seq->issue_seq+1]);
-          $copy->update(['availability' => 0]);
+          $copy->update(['availability' => 0,'location_id'=>'OUT']);
           $issue->save();
         });
         return response()->json($issue);
@@ -100,7 +110,7 @@ class IssueController extends Controller
         $id = $request->input('id');
         $issue = Issue::where('id','=',$id)->first();
         $issue->delete();
-        return response()->json(array('msg'=>"Issue Deleted Successfully"));
+        return response()->json(array('error'=>"Issue Deleted Successfully"));
    }
 
    public function update(Request $request){
