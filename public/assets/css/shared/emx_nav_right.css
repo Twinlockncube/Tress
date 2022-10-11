@@ -589,7 +589,7 @@ table button:hover{
 	position: absolute;
 	top: 247px;
 	width: 98%;
-	height: 46%;
+	height: 43%;
 	overflow-y: scroll;
 	overflow-x: hidden;
 	border-bottom: 2px solid grey;
@@ -615,13 +615,12 @@ table button:hover{
 
 .bottom-wing{
 	position:absolute;
-	bottom: 0px;
+	bottom: -1px;
 	/*background-color: blue;*/
 }
 
-.submitter{
-	position: absolute;
-	bottom: 0px;
+.list_sub{
+	position: relative;
 }
 /**********************Datatable Styles ***********/
 

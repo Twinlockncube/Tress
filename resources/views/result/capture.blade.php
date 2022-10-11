@@ -99,16 +99,8 @@
         </button>
       </div>
       <div class="modal-body">
-        <table class="table table-bordered assess-datatable table-sm table-striped" width="80%">
-                  <thead>
-                      <tr>
-                        <th>No</th>
-                        <th>Id</th>
-                        <th>Subject</th>
-                        <th>Class</th>
-                        <th>Date</th>
-
-                      </tr>
+        <table class="table table-bordered assess-datatable table-sm table-striped" width="100%">
+                  <thead class="thead-dark">
                   </thead>
                   <tbody>
                   </tbody>
@@ -126,29 +118,31 @@
 
 <form id="marks">
     @csrf
- <div class="listing">
-	<table class="table table-editable table-striped table-sm yajra-datatable">
-    <thead>
-      <tr>
-		    <th>#</th>
-        <th>Student Number</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Score</th>
-        <th>Selection</th>
-      </tr>
-    </thead>
-    <tbody>
+    <div id="list_sub">
+      <div class="listing">
+       <table class="table table-editable table-striped table-sm yajra-datatable">
+         <thead>
+           <tr>
+             <th>#</th>
+             <th>Student Number</th>
+             <th>First Name</th>
+             <th>Last Name</th>
+             <th>Score</th>
+             <th>Selection</th>
+           </tr>
+         </thead>
+         <tbody>
 
-    </tbody>
-  </table>
- </div>
- <div class="submitter">
-	<button type="button" class="btn btn-secondary btn-sm form-control-sm mb-2" name="submit" id="submit">Submit</button>&nbsp;&nbsp;
-  <button type="button" class="btn btn-info btn-sm form-control-sm mb-2 search" >Search</button>&nbsp;&nbsp;
-  <button type="button" class="btn btn-secondary btn-sm form-control-sm mb-2" name="edit" id="edit">Edit</button>&nbsp;&nbsp;
-  <button type="button" class="btn btn-dark btn-sm form-control-sm mb-2" name="new" id="new">New</button>
- </div>
+         </tbody>
+       </table>
+      </div>
+      <div class="bottom-wing">
+       <button type="button" class="btn btn-secondary btn-sm form-control-sm mb-2" name="submit" id="submit">Submit</button>&nbsp;&nbsp;
+       <button type="button" class="btn btn-info btn-sm form-control-sm mb-2 search" >Search</button>&nbsp;&nbsp;
+       <button type="button" class="btn btn-secondary btn-sm form-control-sm mb-2" name="edit" id="edit">Edit</button>&nbsp;&nbsp;
+       <button type="button" class="btn btn-dark btn-sm form-control-sm mb-2" name="new" id="new">New</button>
+      </div>
+    </div>
 </form>
 
 
@@ -174,26 +168,24 @@
        var total = parseInt($('#total').val());
       if(score>total){
         $(this).text("- -");
-        alert("Unacceptable Value");
+        swal('Tress','Unacceptable Value','warning');
         //$(this).focus();
       }
     }
-    /*if($(this).val()>$('#total').val()){
-      alert("Unacceptable value");
-      $(this).val("");
-    }*/
 
   });
 
   $('#code').focusout(function(){
     var code = $('#code').val();
     var group = $('#group').val();
+    var total =0;
     $.ajax({
         type:'get',
         url:'{{route("assessment.view")}}',
         data:{'id':code,'group':group},
         success: function(response){
           if(!response.msg){
+            total = response.total;
             $('#form_header input').attr("readonly",false);
             $('#total').val(response.total);
             $('#sub').val(response.subject.id);
@@ -206,7 +198,7 @@
             $('#date').val(response.date);
             $('#form_header input').not('#code').attr("readonly",true);
 
-            search();
+            search(total);
           }
           else{
             $('input').not('#group').val("");
@@ -215,8 +207,8 @@
             swal('Tress',response.msg,'error');
           }
         },
-        error: function(resp){
-          swal('Tress',resp.msg,'error');
+        error: function(response){
+          swal('Tress',response.responseJSON.message,'error');
         }
     });
   });
@@ -250,8 +242,8 @@
                  url:url,
                  data:{"_token": "{{ csrf_token() }}", "lines":JSON.stringify(lines),"ass_code":assessment_id},
                  success: function(response){
-                   //table.ajax.url(url).load();
-                   alert(response.msg);
+                  // table.ajax.url(url).load();
+                   swal('Tress',response.msg,'success');
                  },
                  error: function(resp){
                    alert(resp.msg);
@@ -279,6 +271,13 @@
           scrollCollapse: true,
           paging:         false,
           ajax: "{{ route('assessment.list') }}",
+          columnDefs:[
+            {title: 'No', targets: 0},
+            {title: 'Id', targets: 1},
+            {title: 'Subject', targets: 2},
+            {title: 'Class', targets: 3},
+            {title: 'Date', targets: 4},
+          ],
           columns: [
               {data: 'DT_RowIndex', name: 'DT_RowIndex'},
               {data: function(row){
@@ -299,6 +298,7 @@
    event.preventDefault();
    var id = $(event.target).text();
    $('#code').val(id);
+   $('#code').focus();
    return false;
  }
 
@@ -306,7 +306,7 @@
    tableAss.columns.adjust().draw();
  }
 
- function search(){
+ function search(total){
    i++;
    class_id = $('#group').val();
    var ass_code = $('#code').val();
@@ -325,7 +325,7 @@
              { className: "my_score", "targets": [ 4 ],
               render: function(data,type,row){
                 var the_color = 'black';
-                if(data<50){
+                if(parseFloat(data)/total!=NaN && data/total<0.5){
                   the_color = 'red';
                 }
                 return '<span style="color:'+the_color+'">'+data+'</span>'

@@ -52,7 +52,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('students/list', [App\Http\Controllers\StudentController::class, 'getStudents'])->name('students.list');
 
     //Assessment Routes
-    Route::get('assessment/capture', [App\Http\Controllers\AssessmentController::class, 'index'])->name('assessment.capture');
+    Route::get('assessment/index', [App\Http\Controllers\AssessmentController::class, 'index'])->name('assessment.index');
     Route::get('assessment/list', [App\Http\Controllers\AssessmentController::class, 'getAssessments'])->name('assessment.list');
     Route::get('assessment/subject', [App\Http\Controllers\AssessmentController::class, 'getSubject'])->name('assessment.subject');
     Route::post('assessment/create', [App\Http\Controllers\AssessmentController::class, 'create'])->name('assessment.create');

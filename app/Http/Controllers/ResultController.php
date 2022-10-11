@@ -20,7 +20,6 @@ class ResultController extends Controller
 
   public function getResults(Request $request){
    if ($request->ajax()) {
-       //$class_group = Route::current()->parameter('class_group_id');
        $class_group = $request->route('group');
        $ass_id = $request->route('code');
        $the_assessment=Assessment::find($ass_id);

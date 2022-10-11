@@ -14,7 +14,7 @@ use Illuminate\Routing\Route;
 class AssessmentController extends Controller
 {
   public function index(){
-    return view('assessment/capture');
+    return view('assessment/index');
   }
 
   public function validateTotal(Request $request){
@@ -24,9 +24,10 @@ class AssessmentController extends Controller
   }
 
   public function viewAssessment(Request $request){
+    $validate =$request->validate(['group'=>'required']);
     $id = $request->input('id');
     if(!empty($request->input('group'))){
-      $class_group = $request->input('group');
+      $class_group = strtoupper($request->input('group'));
 
       $the_assessment = Assessment::find($id);
       if(!($the_assessment) || !($the_assessment->class_group->name===$class_group)){
