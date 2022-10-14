@@ -50,6 +50,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/view_student',[App\Http\Controllers\StudentController::class, 'viewStudent'])->name('view_student');
     Route::get('/delete_student',[App\Http\Controllers\StudentController::class, 'deleteStudent'])->name('delete_student');
     Route::get('students/list', [App\Http\Controllers\StudentController::class, 'getStudents'])->name('students.list');
+    //Subject Routes
+    Route::get('subject/existence', [App\Http\Controllers\SubjectController::class, 'existence'])->name('subjects.existence');
+
 
     //Assessment Routes
     Route::get('assessment/index', [App\Http\Controllers\AssessmentController::class, 'index'])->name('assessment.index');
@@ -63,6 +66,7 @@ Route::group(['middleware' => ['auth']], function() {
     //Results Routes
     Route::get('result/list/{group}/{code}', [App\Http\Controllers\ResultController::class, 'getResults'])->name('result.list');
     Route::get('result/capture', [App\Http\Controllers\ResultController::class, 'index'])->name('result.capture');
+    Route::get('results/view', [App\Http\Controllers\ResultController::class, 'viewAssessment'])->name('result.view');
     Route::post('result/create', [App\Http\Controllers\ResultController::class, 'create'])->name('result.create');
 
     //Books Routes

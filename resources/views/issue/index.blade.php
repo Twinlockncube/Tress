@@ -72,7 +72,7 @@
                       <label for="id" class="col-md-4 col-form-label text-md-right">{{ __('Issue Id') }}</label>
 
                       <div class="col-md-6">
-                          <input id="id" type="text" class="form-control form-control-sm input-sm @error('id') is-invalid @enderror" name="id" value="{{ old('id') }}" required autocomplete="id" autofocus>
+                          <input id="id" type="text" class="form-control form-control-sm input-sm @error('id') is-invalid @enderror" name="id" value="{{ old('id') }}"  autocomplete="id" autofocus>
 
                           @error('id')
                               <span class="invalid-feedback" role="alert">
@@ -100,7 +100,7 @@
                       <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Book Title') }}</label>
 
                       <div class="col-md-6">
-                          <input id="title" type="text" class="form-control form-control-sm input-sm @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" required autocomplete="title" autofocus>
+                          <input id="title" type="text" class="form-control form-control-sm input-sm @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}"  autocomplete="title" autofocus>
 
                           @error('title')
                               <span class="invalid-feedback" role="alert">

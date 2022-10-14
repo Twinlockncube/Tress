@@ -18,6 +18,21 @@ class ResultController extends Controller
     return view('result/capture');
   }
 
+  public function viewAssessment(Request $request){
+    $validate =$request->validate(['group'=>'required']);
+    $id = $request->input('id');
+    if(!empty($request->input('group'))){
+      $class_group = strtoupper($request->input('group'));
+
+      $the_assessment = Assessment::find($id);
+      if(!($the_assessment) || !($the_assessment->class_group->name===$class_group)){
+        return response()->json(['msg'=>'Code Not Found In Class']);
+      }
+    }
+    $assessment = Assessment::where('id','=',$id)->with('subject')->first();
+    return response()->json($assessment);
+  }
+
   public function getResults(Request $request){
    if ($request->ajax()) {
        $class_group = $request->route('group');

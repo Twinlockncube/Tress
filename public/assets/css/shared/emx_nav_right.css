@@ -93,6 +93,9 @@ input{
 font-family: Arial,sans-serif;
 }
 
+:required{
+	border: 1px solid #FF8A8A;
+}
 /***********************************************/
 /* Layout Divs                                 */
 /*******************O************************/

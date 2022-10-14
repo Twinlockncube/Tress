@@ -76,9 +76,12 @@ class IssueController extends Controller
 
     public function create(Request $request){
       if($request->ajax()){
-        $students = explode(',',$request->get('students'));
-
         /*****Validation***********************************/
+        $validate = $request->validate([
+          'copy_id'=>'required|max:20',
+          'date'=>'required|date|before:tomorrow',
+        ]);
+        $students = explode(',',$request->get('students'));
         foreach($students as $student){
           if(Student::find($student)===null){
             return response()->json(['msg'=>'Student '.$student.' does not exist']);

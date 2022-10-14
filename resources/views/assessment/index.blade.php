@@ -33,7 +33,7 @@
                             <label for="id" class="col-md-4 col-form-label text-md-right">{{ __('Id') }}</label>
 
                             <div class="col-md-6">
-                                <input id="id" type="text" class="form-control form-control-sm input-sm @error('id') is-invalid @enderror" name="last_name" value="{{ old('last_name') }}" required autocomplete="last_name" autofocus>
+                                <input id="id" type="text" class="form-control form-control-sm input-sm @error('id') is-invalid @enderror" name="id" value="{{ old('last_name') }}"  autocomplete="id" autofocus>
 
                                 @error('id')
                                     <span class="invalid-feedback" role="alert">
@@ -61,7 +61,7 @@
                             <label for="description" class="col-md-4 col-form-label text-md-right">{{ __('Description') }}</label>
 
                             <div class="col-md-6">
-                                <input id="description" type="text" class="form-control form-control-sm input-sm @error('description') is-invalid @enderror" name="description" value="{{ old('description') }}" required autocomplete="description" autofocus>
+                                <input id="description" type="text" class="form-control form-control-sm input-sm @error('description') is-invalid @enderror" name="description" value="{{ old('description') }}" autocomplete="description" autofocus>
 
                                 @error('description')
                                     <span class="invalid-feedback" role="alert">
@@ -145,7 +145,7 @@
                             <label for="weight" class="col-md-4 col-form-label text-md-right">{{ __('Weight') }}</label>
 
                             <div class="col-md-6">
-                                <input id="weight" type="text" class="form-control form-control-sm input-sm @error('nid') is-invalid @enderror" name="weight" value="{{ old('weight') }}" required autocomplete="weight" autofocus>
+                                <input id="weight" type="text" class="form-control form-control-sm input-sm @error('nid') is-invalid @enderror" name="weight" value="{{ old('weight') }}"  autocomplete="weight" autofocus>
 
                                 @error('address')
                                     <span class="invalid-feedback" role="alert">
@@ -159,7 +159,7 @@
                             <label for="parent" class="col-md-4 col-form-label text-md-right">{{ __('Parent') }}</label>
 
                             <div class="col-md-6">
-                                <input id="parent" type="text" class="form-control form-control-sm input-sm @error('parent') is-invalid @enderror" name="parent" value="{{ old('parent') }}" required autocomplete="parent" autofocus>
+                                <input id="parent" type="text" class="form-control form-control-sm input-sm @error('parent') is-invalid @enderror" name="parent" value="{{ old('parent') }}"  autocomplete="parent" autofocus>
 
                                 @error('parent')
                                     <span class="invalid-feedback" role="alert">
@@ -218,6 +218,7 @@
                           data:$('form').serialize(),
                           success: function(response){
                             $('#id').val(response.id);
+                            swal('Tress','Assessment Created Successfully','success');
                             $('.yajra-datatable').DataTable().ajax.reload();
                           },
                           error: function(resp){
@@ -298,6 +299,26 @@
                       });
                     }
 
+                    function checkExistence(){
+                      var id = $('#sub').val();
+                      $.ajax({
+                          type:'get',
+                          url:"{{route('subjects.existence')}}",
+                          data:{id:id},
+                          success: function(response){
+                            if($.isEmptyObject(response)){
+                              $('#sub').val('');
+                              swal('Tress','Subject does not exist','warning');
+                            }
+                          },
+                          error: function(response){
+                            $('#sub').val('');
+                            swal('Tress',response.responseJSON.message,'error');
+                          }
+                      });
+                      return false;
+                    }
+
                     function viewAssess(event){
                       event.preventDefault();
                       var id = $(event.target).text();
@@ -330,6 +351,10 @@
                     }
                     var new_entry = true;
                     $(document).ready(function(){
+
+                      $('#sub').on('blur',function(){
+                        checkExistence();
+                      });
 
                         $('#parent').focusout(function(){
                           var parent = $('#parent').val();
@@ -380,8 +405,8 @@
                                  {data: function(row){
                                    return '<a href="#" onClick="viewAssess(event)" style="color:black">'+row.id+'</a>';
                                  }, name: 'id'},
-                                 {data: 'subject.name', name: 'subject'},
-                                 {data: 'class_group.name', name: 'class_group'},
+                                 {data: 'subject.name', name: 'subject.name'},
+                                 {data: 'class_group.name', name: 'class_group.name'},
                                  {data: 'date', name: 'date'},
                              ]
                          });

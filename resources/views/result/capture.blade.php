@@ -166,7 +166,7 @@
     if(!($(this).children().first().is(':checkbox'))){
        var score = parseInt($(this).text());
        var total = parseInt($('#total').val());
-      if(score>total){
+      if(isNaN(score) || score>total || score<0){
         $(this).text("- -");
         swal('Tress','Unacceptable Value','warning');
         //$(this).focus();
@@ -181,7 +181,7 @@
     var total =0;
     $.ajax({
         type:'get',
-        url:'{{route("assessment.view")}}',
+        url:'{{route("result.view")}}',
         data:{'id':code,'group':group},
         success: function(response){
           if(!response.msg){

@@ -24,7 +24,6 @@ class AssessmentController extends Controller
   }
 
   public function viewAssessment(Request $request){
-    $validate =$request->validate(['group'=>'required']);
     $id = $request->input('id');
     if(!empty($request->input('group'))){
       $class_group = strtoupper($request->input('group'));
@@ -68,7 +67,9 @@ class AssessmentController extends Controller
 
   public function create(Request $request){
       if($request->ajax()){
-
+      $validate = $request->validate([
+        'title'=>'required',
+      ]);
       $subject_id =$request->get('sub');
       $subject = Subject::where('id','=',$subject_id)->first();
       $id =$this->assessmentNumber($subject);
