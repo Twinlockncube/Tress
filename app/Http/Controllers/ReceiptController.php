@@ -7,6 +7,7 @@ use App\Models\Receipt;
 use App\Models\Sequence;
 use App\Models\Issue;
 use DataTables;
+use Illuminate\Support\Facades\Validator;
 use DB;
 class ReceiptController extends Controller
 {
@@ -33,6 +34,22 @@ class ReceiptController extends Controller
     }
     public function create(Request $request){
       if($request->ajax()){
+        $validator = Validator::make($request->all(),[
+          'issue_id' => [
+            'bail',
+            'required',
+            'exists:issues,id',
+            function ($attribute, $value, $fail) {
+              $issue = Issue::find($value);
+              if ($issue->status == 1) {
+                $fail('The issue '.$value.' is already returned.');
+              }
+            },
+          ],
+         'date'=> [
+            'required','date','before:tomorrow'
+         ]
+        ])->validate();
         $location = $request->get('location');
          $seq = Sequence::find(1);
          $receipt = new Receipt([
@@ -41,13 +58,6 @@ class ReceiptController extends Controller
           'date' => $request->get('date'),
         ]);
 
-        $issue = Issue::find($request->get('issue_id'));
-        if($issue===null){
-          return response()->json(['error'=>'Issue '.$request->get('issue_id').' does not exist']);
-        }
-        if($issue->status==1){
-          return response()->json(['error'=>'Issue '.$request->get('issue_id').' already returned']);
-        }
         $copy = $issue->copy;
         DB::transaction(function() use ($receipt,$seq,$issue,$copy,$location){
           $issue->update(['status'=> 1]);
@@ -68,5 +78,29 @@ class ReceiptController extends Controller
           });
         })->first();
         return response()->json($receipt);
+    }
+
+    public function title(Request $request){
+      $id = $request->get('issue_id');
+      $validator = Validator::make($request->all(),[
+        'issue_id' => [
+          'bail',
+          'required',
+          'exists:issues,id',
+          function ($attribute, $value, $fail) {
+            $issue = Issue::find($value);
+            if ($issue->status == 1) {
+              $fail('The issue '.$value.' is already returned.');
+            }
+          },
+        ],
+      ])->validate();
+
+
+
+      $issue = Issue::where('id','=',$id)->with('copy',function($query){
+        return $query->with('book');
+      })->first();
+      return response()->json($issue);
     }
 }

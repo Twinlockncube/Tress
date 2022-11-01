@@ -18,6 +18,16 @@ class CopyController extends Controller
        $data = Copy::latest()->with('book')->get();
        return Datatables::of($data)
            ->addIndexColumn()
+           ->addColumn('availability',function(Copy $copy){
+             $availability = "";
+             if($copy->availability===1){
+               $availability = 'Available';
+             }
+             else{
+               $availability = 'Out';
+             }
+            return $availability;
+           })
            ->make(true);
          }
     }

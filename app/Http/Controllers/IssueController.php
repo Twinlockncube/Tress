@@ -8,6 +8,7 @@ use App\Models\Copy;
 use App\Models\Sequence;
 use App\Models\Student;
 use DataTables;
+use Validator;
 use DB;
 
 class IssueController extends Controller
@@ -47,7 +48,7 @@ class IssueController extends Controller
            ->addColumn('return_status',function(Issue $issue){
              $return_status = "";
              if($issue->status==0){
-               $return_status = "Not_Returned";
+               $return_status = "Out";
              }
              else{
                $return_status = "Returned";
@@ -76,17 +77,32 @@ class IssueController extends Controller
 
     public function create(Request $request){
       if($request->ajax()){
-        /*****Validation***********************************/
-        $validate = $request->validate([
-          'copy_id'=>'required|max:20',
-          'date'=>'required|date|before:tomorrow',
-        ]);
         $students = explode(',',$request->get('students'));
-        foreach($students as $student){
-          if(Student::find($student)===null){
-            return response()->json(['msg'=>'Student '.$student.' does not exist']);
-          }
-        }
+        /*****Validation***********************************/
+        $validator = Validator::make($request->all(),[
+          'copy_id' => [
+            'bail',
+            'required',
+            'exists:copies,id',
+          ],
+         'students'=> [
+            'required',
+            function ($attribute, $value, $fail) use($students){
+              $the_student =null;
+              //$students = explode(',',$value);
+              foreach($students as $student){
+                if(!(Student::where('id','=',$student)->exists())){
+                  $the_student = $student;
+                  break;
+                }
+              }
+              if (!($the_student===null)) {
+                $fail('The student '.$the_student.' does not exist.');
+              }
+            },
+         ]
+        ])->validate();
+
         /*****End Validation***********************************/
 
          $seq = Sequence::find(1);

@@ -372,7 +372,7 @@
                             $('#submit').attr("disabled",true);
                           },
                           error: function(resp){
-                            alert(resp.msg);
+                            alert(resp.responseJSON.message);
                           }
                       });
                       return false;

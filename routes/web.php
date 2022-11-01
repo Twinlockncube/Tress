@@ -91,11 +91,13 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('issues/create', [App\Http\Controllers\IssueController::class, 'create'])->name('issues.create');
     Route::delete('issues/delete', [App\Http\Controllers\IssueController::class, 'delete'])->name('issues.delete');
     Route::post('issues/update', [App\Http\Controllers\IssueController::class, 'update'])->name('issues.update');
+
     //Receipt Routes
     Route::get('receipt/index', [App\Http\Controllers\ReceiptController::class, 'index'])->name('receipts.index');
     Route::get('receipt/list', [App\Http\Controllers\ReceiptController::class, 'list'])->name('receipts.list');
     Route::post('receipt/create', [App\Http\Controllers\ReceiptController::class, 'create'])->name('receipts.create');
     Route::get('receipt/view', [App\Http\Controllers\ReceiptController::class, 'view'])->name('receipts.view');
+    Route::get('receipt/title', [App\Http\Controllers\ReceiptController::class, 'title'])->name('receipts.title');
 
 
     //Payment Routes

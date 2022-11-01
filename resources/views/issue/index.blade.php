@@ -12,7 +12,7 @@
                       <th>Book_Id</th>
                       <th>Book_Copy</th>
                       <th>Student</th>
-                      <th>Date_Received</th>
+                      <th>Date_Issued</th>
                       <th>Status</th>
                       <th>Details</th>
                       <th>Student_list</th>
@@ -195,8 +195,8 @@
                         swal('Tress',response.error,'error');
                       }
                     },
-                    error: function(resp){
-                      swal('Tress',resp.responseJSON.message,'error');
+                    error: function(response){
+                      swal('Tress',errorMessage(response),'error');
                     }
                 });
               }
@@ -269,24 +269,28 @@
                     url:"{{route('copies.availability')}}",
                     data:{id:id},
                     success: function(response){
-                      if($.isEmptyObject(response)){
-                        $('#copy_id').val('');
-                        swal('Tress','Copy does not exist','warning');
-                      }
-                      else if(response.availability==0){
-                        $('#copy_id').val('');
-                        swal('Tress','Chosen book copy unavailable','warning');
-                      }
-                      else{
-                        $('#title').val(response.book.title);
+                      if(!($.isEmptyObject(response))){
+                        if(response.availability==0){
+                          $('#copy_id').val('');
+                          $('#copy_id').addClass('red-border');
+                          swal('Tress','Chosen book copy unavailable','warning');
+                        }
+                        else{
+                          $('#title').val(response.book.title);
+                        }
                       }
                     },
                     error: function(response){
                       $('#copy_id').val('');
+                      $('#copy_id').addClass('red-border');
                       swal('Tress',response.responseJSON.message,'error');
                     }
                 });
-                return false;
+                  return false;
+              }
+
+              function validator(){
+                checkAvailability();
               }
 
               function viewIssue(event){
@@ -328,7 +332,7 @@
                       $('#submit').attr("disabled",true);
                     },
                     error: function(response){
-                      swal('Tress',response.responseJSONresp.message);
+                      swal('Tress',response.responseJSON.message,'warning');
                     }
                 });
                 return false;
@@ -347,11 +351,11 @@
               }
 
               $(document).ready(function(){
-
-                  $('#copy_id').on('blur',function(){
-                    checkAvailability();
+                  $('#copy_id').blur(function(){
+                    if(!blank){
+                      checkAvailability();
+                    }
                   });
-
                   $('#reg_form input').attr("readonly",true);
                   $('#reg_form select').attr("disabled",true);
                   $('#submit').click(function(event){

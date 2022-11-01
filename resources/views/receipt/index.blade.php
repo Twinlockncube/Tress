@@ -5,7 +5,7 @@
 
         <div id="resultLinks">
           <table class="table table-bordered yajra-datatable table-sm table-striped">
-                    <thead>
+                    <thead class="thead-dark">
                         <tr>
                             <th>No</th>
                             <th>Id</th>
@@ -68,7 +68,7 @@
                             <label for="id" class="col-md-4 col-form-label text-md-right">{{ __('Id') }}</label>
 
                             <div class="col-md-6">
-                                <input id="id" type="text" class="form-control form-control-sm input-sm @error('id') is-invalid @enderror" name="id" value="{{ old('id') }}" required autocomplete="id" autofocus>
+                                <input id="id" type="text" class="form-control form-control-sm input-sm @error('id') is-invalid @enderror" name="id" value="{{ old('id') }}"  autocomplete="id" autofocus>
 
                                 @error('id')
                                     <span class="invalid-feedback" role="alert">
@@ -96,7 +96,7 @@
                             <label for="address" class="col-md-4 col-form-label text-md-right">{{ __('Book Title') }}</label>
 
                             <div class="col-md-6">
-                                <input id="book_title" type="text" class="form-control form-control-sm input-sm @error('book_title') is-invalid @enderror" name="book_title" value="{{ old('book_title') }}" required autocomplete="book_title" autofocus>
+                                <input id="book_title" type="text" class="form-control form-control-sm input-sm @error('book_title') is-invalid @enderror" name="book_title" value="{{ old('book_title') }}"  autocomplete="book_title" autofocus>
 
                                 @error('book_title')
                                     <span class="invalid-feedback" role="alert">
@@ -170,18 +170,13 @@
                           url:"{{route('receipts.create')}}",
                           data:$('form').serialize(),
                           success: function(response){
-                            if(response.error===undefined){
                               $('.yajra-datatable').DataTable().ajax.reload();
                               $('#id').val(response.id);
                               swal('Tress','Receipt Captured Successfully','success');
                               $('#submit').attr("disabled",true);
-                            }
-                            else{
-                              swal('Tress',response.error,'error');
-                            }
                           },
-                          error: function(resp){
-                            swal('Tress',resp.msg,'error');
+                          error: function(response){
+                            swal('Tress',errorMessage(response),'error');
                           }
                       });
                     }
@@ -195,6 +190,24 @@
                       var id = $(event.target).text();
                       $('#guardian').val(id);
                       return false;
+                    }
+
+                    function findTitle(){
+                      var issue_id = $('#issue_id').val();
+                      $.ajax({
+                          type:'get',
+                          url:"{{route('receipts.title')}}",
+                          data:{issue_id:issue_id},
+                          success: function(response){
+                              $('#book_title').val(response.copy.book.title);
+                          },
+                          error: function(response){
+                            $('#issue_id').val('');
+                            $('#issue_id').addClass('red-border');
+                            swal('Tress',errorMessage(response),'error');
+                          }
+                      });
+                        return false;
                     }
 
                     function updateBook(){
@@ -273,6 +286,13 @@
 
                     $(document).ready(function(){
                         $('#reg_form input').attr("readonly",true);
+
+                        $('#issue_id').blur(function(){
+                          if($(this).val().length>0){
+                            findTitle();
+                          }
+                        });
+
                         $('#submit').click(function(event){
                             event.preventDefault();
                             if(new_entry){

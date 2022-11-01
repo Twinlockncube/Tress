@@ -5,13 +5,13 @@
 
         <div id="resultLinks">
           <table class="table table-bordered yajra-datatable table-sm table-striped">
-                    <thead>
+                    <thead class="thead-dark">
                         <tr>
                             <th>No</th>
                             <th>Id</th>
                             <th>Book Title</th>
                             <th>Subject Id</th>
-
+                            <th>Availability</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -32,7 +32,7 @@
       </div>
       <div class="modal-body">
         <table class="table table-bordered guard-datatable table-sm table-striped" width="80%">
-                  <thead>
+                  <thead >
                       <tr>
                         <th>No</th>
                         <th>Id</th>
@@ -327,6 +327,7 @@
                                  }, name: 'id'},
                                  {data: 'book.title', name: 'book.title'},
                                  {data: 'book.subject_id', name: 'book.subject_id'},
+                                 {data: 'availability', name: 'availability'},
                              ]
                          });
 

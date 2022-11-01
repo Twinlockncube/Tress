@@ -31,7 +31,38 @@
 
 
 <script type="text/javascript">
-<!--
+<!-- //Validation
+var blank;
+
+$(document).ready(function(){
+  blank = true;
+  $(':required').addClass('red-border');
+
+  $(':required').blur(function(){
+    if(!($(this).attr('readonly')=='readonly')){
+      if($(this).val().length>0){
+        blank = false;
+        $(this).removeClass('red-border');
+      }
+      else{
+        swal('Tress','Field cannot be empty','warning');
+      }
+    }
+  });
+});
+
+function errorMessage(response){
+      let error_message ="";
+      $.each(response.responseJSON.errors,function(){
+        if(error_message.length>0){
+          error_message = error_message + "\n"+this;
+        }
+        else{
+          error_message = this.toString();
+        }
+      });
+      return error_message;
+  }
 <!--
 var time = 3000;
 var numofitems = 7;
