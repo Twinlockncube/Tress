@@ -34,6 +34,7 @@ class ReceiptController extends Controller
     }
     public function create(Request $request){
       if($request->ajax()){
+
         $validator = Validator::make($request->all(),[
           'issue_id' => [
             'bail',
@@ -50,6 +51,7 @@ class ReceiptController extends Controller
             'required','date','before:tomorrow'
          ]
         ])->validate();
+
         $location = $request->get('location');
          $seq = Sequence::find(1);
          $receipt = new Receipt([

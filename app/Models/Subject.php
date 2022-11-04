@@ -17,6 +17,7 @@ class Subject extends Model
        'id',
        'name',
        'description',
+       'assessment_seq',
    ];
 
     public function teachers(){
@@ -29,10 +30,6 @@ class Subject extends Model
 
     public function assessments(){
       return $this->hasMany(Assessment::class);
-    }
-
-    public function sequence(){
-      return $this->hasOne(Sub_Sequence::class);
     }
 
     public function lessons(){

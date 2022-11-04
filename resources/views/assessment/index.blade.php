@@ -117,13 +117,12 @@
                             <label for="category" class="col-md-4 col-form-label text-md-right">{{ __('Category') }}</label>
 
                             <div class="col-md-6">
-                                <input id="category" type="email" class="form-control form-control-sm input-sm @error('category') is-invalid @enderror" name="category" value="{{ old('category') }}" required autocomplete="category">
-
-                                @error('category')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                              <select id="status" class="form-control form-control-sm">
+                                <option value="n">Category</option>
+                                <option value="0">Test</option>
+                                <option value="1">Exercise</option>
+                                <option value="1">Exam</option>
+                              </select>
                             </div>
                         </div>
 
@@ -395,11 +394,14 @@
                         });
 
                         $(function () {
-
                          var table = $('.yajra-datatable').DataTable({
                              processing: true,
                              serverSide: true,
                              ajax: "{{ route('assessment.list') }}",
+                             dom: "Bftip",
+                             buttons: [
+                               'excel','pdf','print'
+                             ],
                              columns: [
                                  {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                                  {data: function(row){
@@ -410,7 +412,7 @@
                                  {data: 'date', name: 'date'},
                              ]
                          });
-
+                        // console.log(table.buttons().container());
                        });
 
                     });

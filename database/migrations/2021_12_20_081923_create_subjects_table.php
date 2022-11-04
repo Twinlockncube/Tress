@@ -17,6 +17,7 @@ class CreateSubjectsTable extends Migration
             $table->string('id')->primary();
             $table->string('name');
             $table->string('description');
+            $table->integer('assessment_seq')->default(0);
             $table->timestamps();
 
             //$table->foreign('class_group_id')

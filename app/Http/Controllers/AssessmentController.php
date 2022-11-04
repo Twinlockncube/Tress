@@ -49,7 +49,7 @@ class AssessmentController extends Controller
   public function assessmentNumber(Subject $subject){
     $length = 4;
     $name = $subject->id;
-    $string = $subject->sequence->seq_num + 1;
+    $string = $subject->assessment_seq + 1;
     $postfix = str_pad($string,$length,"0", STR_PAD_LEFT);
     $prefix = substr(date('Y'),2);
     return strtoupper(substr($name,0,4)).$prefix.$postfix.'AS';
@@ -97,8 +97,10 @@ class AssessmentController extends Controller
         'date' => $date,
       ]);
 
-      $assessment->save();
-      $subject->ass_sequence()->update(['seq_num'=> $subject->ass_sequence->seq_num+1]);
+      DB::transaction(function() use ($assessment,$subject){
+        $assessment->save();
+        $subject->update(['assessment_seq'=> $subject->assessment_seq+1]);
+      });
       return response()->json($assessment);
     }
   }

@@ -121,7 +121,7 @@
     <div id="list_sub">
       <div class="listing">
        <table class="table table-editable table-striped table-sm yajra-datatable">
-         <thead>
+         <thead class="thead-dark">
            <tr>
              <th>#</th>
              <th>Student Number</th>
@@ -283,8 +283,8 @@
               {data: function(row){
                 return '<a href="#" onClick="selectAssess(event)" data-dismiss="modal" style="color:black">'+row.id+'</a>';
               }, name: 'id'},
-              {data: 'subject.name', name: 'subject'},
-              {data: 'class_group.name', name: 'class_group'},
+              {data: 'subject.name', name: 'subject.name'},
+              {data: 'class_group.name', name: 'class_group.name'},
               {data: 'date', name: 'date'},
 
           ]
