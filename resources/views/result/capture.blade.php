@@ -167,7 +167,7 @@
        var score = parseInt($(this).text());
        var total = parseInt($('#total').val());
       if(isNaN(score) || score>total || score<0){
-        $(this).text("- -");
+        $(this).text("");
         swal('Tress','Unacceptable Value','warning');
         //$(this).focus();
       }
@@ -243,6 +243,7 @@
                  data:{"_token": "{{ csrf_token() }}", "lines":JSON.stringify(lines),"ass_code":assessment_id},
                  success: function(response){
                   // table.ajax.url(url).load();
+                   table.column('selection:name').visible(false);
                    swal('Tress',response.msg,'success');
                  },
                  error: function(resp){
@@ -254,12 +255,10 @@
 
      $('#edit').click(function(){
        table.column('selection:name').visible(true);
-       //console.log(col);
        table.cells('.my_score').every(function(){
          $(this.node()).attr('contenteditable', 'true');
        });
      });
-
 
      $(function () {
 
@@ -317,11 +316,31 @@
    if(i==1){
        table = $('.yajra-datatable').DataTable({
            processing: true,
-           serverSide: true,
+           //serverSide: true,
            pageLength: 20,
            ajax: url,
+           dom: "Bfrtip",
+           buttons: [{extend:'excel',
+           title: $('#subject').val()+" Marks Schedule "+class_id +"\n"+
+                  "Date: "+$('#date').val() + "  Title: "+$('#title').val(),
+           exportOptions: {
+                columns: ':visible',
+                modifier: {
+                  page: 'all',
+                  search: 'none'
+                }}},
+                {extend:'pdf',
+                title:$('#subject').val()+" Marks Schedule "+class_id +"\n"+
+                      "Date: "+$('#date').val() + "  Title: "+$('#title').val(),
+                exportOptions: {
+                     columns: ':visible',
+                     modifier: {
+                       page: 'all',
+                       search: 'none'
+                     }}}
+              ],
            columnDefs:[
-             {'defaultContent':'- -','targets':'_all'},
+             {'defaultContent':'','targets':'_all'},
              { className: "my_score", "targets": [ 4 ],
               render: function(data,type,row){
                 var the_color = 'black';
@@ -341,7 +360,7 @@
                {data: function(row){
                  var mark;
                  if(row.score===null){
-                   mark = '- -';
+                   mark = '';
                  }
                  else{
                    mark = Math.round(row.score);

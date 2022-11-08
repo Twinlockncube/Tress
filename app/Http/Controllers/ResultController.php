@@ -47,6 +47,7 @@ class ResultController extends Controller
                   ->where('students.class_group_id','=',$class_group)
                   ->select(DB::raw('students.id,students.name,students.last_name,sum(results.score*assessments.perc_weight/assessments.total) AS score'))
                   ->groupBy('students.id','students.name','students.last_name')
+                  ->orderBy('score','DESC')
                   ->get();
 
        }
@@ -61,6 +62,7 @@ class ResultController extends Controller
                         })
                   ->where('students.class_group_id','=',$class_group)
                   ->select('students.id','students.name','students.last_name','ass_results.score')
+                  ->orderBy('score','DESC')
                   ->get();
        }
 
@@ -82,7 +84,14 @@ class ResultController extends Controller
        $ass_id = $request->input('ass_code');
        $the_assessment=Assessment::find($ass_id);
        $assessments = $the_assessment->children()->select('id')->get();
-       if(!(count($assessments))){
+       $validate = Validate::make($request->all(),
+            function ($attribute, $value, $fail) use($assessments){
+              if(count($assessments)){
+                $fail('Cannot directly update parent assessment');
+              }
+            }
+         )->validate();
+
                $lines = json_decode($request->input('lines'));
 
                //$results = array();
@@ -97,8 +106,7 @@ class ResultController extends Controller
 
                }
         return response()->json(['msg'=>'Data Captured Successfully']);
-     }
 
-       return response()->json(['msg'=>'Cannot Update']);
+
      }
 }
