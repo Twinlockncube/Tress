@@ -204,11 +204,11 @@
             $('input').not('#group').val("");
             $('.yajra-datatable tbody > tr').remove();
             //$('#code').focus();
-            swal('Tress',response.msg,'error');
+            swal('Tress',errorMessage(response),'error');
           }
         },
         error: function(response){
-          swal('Tress',response.responseJSON.message,'error');
+          swal('Tress',errorMessage(response),'error');
         }
     });
   });
@@ -246,8 +246,8 @@
                    table.column('selection:name').visible(false);
                    swal('Tress',response.msg,'success');
                  },
-                 error: function(resp){
-                   alert(resp.msg);
+                 error: function(response){
+                   swal('Tress',errorMessage(response),'error');
                  }
         });
 

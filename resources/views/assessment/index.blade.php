@@ -221,8 +221,7 @@
                             $('.yajra-datatable').DataTable().ajax.reload();
                           },
                           error: function(resp){
-                            alert(resp.msg);
-                            //swal('Tress',resp.msg,'error');
+                            swal('Tress',resp.responseJSON.message,'error');
                           }
                       });
                     }

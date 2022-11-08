@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DB;
 use Auth;
+use Validator;
 use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Assessment;
@@ -84,12 +85,16 @@ class ResultController extends Controller
        $ass_id = $request->input('ass_code');
        $the_assessment=Assessment::find($ass_id);
        $assessments = $the_assessment->children()->select('id')->get();
-       $validate = Validate::make($request->all(),
-            function ($attribute, $value, $fail) use($assessments){
-              if(count($assessments)){
-                $fail('Cannot directly update parent assessment');
-              }
+       $validate = Validator::make($request->all(),
+        [
+          'ass_code' => ['exists:assessments,id',
+          function ($attribute, $value, $fail) use($assessments){
+            if(count($assessments)){
+              $fail('Cannot directly update parent assessment');
             }
+          }
+        ]
+        ]
          )->validate();
 
                $lines = json_decode($request->input('lines'));
