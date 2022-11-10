@@ -96,6 +96,10 @@ font-family: Arial,sans-serif;
 .red-border{
 	border: 1px solid #FF8A8A;
 }
+
+.my_score{
+	border: 1px solid #C0C0C0;
+}
 /***********************************************/
 /* Layout Divs                                 */
 /*******************O************************/

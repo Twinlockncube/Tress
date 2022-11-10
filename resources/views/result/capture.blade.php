@@ -138,7 +138,6 @@
       </div>
       <div class="bottom-wing">
        <button type="button" class="btn btn-secondary btn-sm form-control-sm mb-2" name="submit" id="submit">Submit</button>&nbsp;&nbsp;
-       <button type="button" class="btn btn-info btn-sm form-control-sm mb-2 search" >Search</button>&nbsp;&nbsp;
        <button type="button" class="btn btn-secondary btn-sm form-control-sm mb-2" name="edit" id="edit">Edit</button>&nbsp;&nbsp;
        <button type="button" class="btn btn-dark btn-sm form-control-sm mb-2" name="new" id="new">New</button>
       </div>
@@ -151,6 +150,7 @@
  var table;
  var tableAss
  var test_var;
+ var isNew = false;
 
  $(document).ready(function(){
 
@@ -175,6 +175,17 @@
 
   });
 
+  $('#new').click(function(){
+    $('.yajra-datatable tbody > tr').remove();
+    $('.dataTables_info').empty();
+    $('.dataTables_paginate').empty();
+    $('.dt-buttons').empty();
+    $('.left-pane input').val("");
+    $('.left-pane input').attr('readonly',false);
+    $('#group').focus();
+    isNew = true;
+  });
+
   $('#code').focusout(function(){
     var code = $('#code').val();
     var group = $('#group').val();
@@ -184,7 +195,6 @@
         url:'{{route("result.view")}}',
         data:{'id':code,'group':group},
         success: function(response){
-          if(!response.msg){
             total = response.total;
             $('#form_header input').attr("readonly",false);
             $('#total').val(response.total);
@@ -197,15 +207,7 @@
             $('#parent').val(response.parent_id);
             $('#date').val(response.date);
             $('#form_header input').not('#code').attr("readonly",true);
-
             search(total);
-          }
-          else{
-            $('input').not('#group').val("");
-            $('.yajra-datatable tbody > tr').remove();
-            //$('#code').focus();
-            swal('Tress',errorMessage(response),'error');
-          }
         },
         error: function(response){
           swal('Tress',errorMessage(response),'error');
@@ -226,13 +228,20 @@
         $('.yajra-datatable tbody tr').each(function(){
           var checker = $(this).find('td:eq(5)');
           var score = $(this).find('td:eq(4)').text();
-          if(!(isNaN(score)) && checker.find('input:checkbox').is(':checked')){
-                var id = $(this).find('td:eq(1)').text();
-                var result = {};
-                result['assessment_id'] = assessment_id;
-                result['student_id'] =id;
-                result['score'] = score;
-                lines.push(result);
+          var id = $(this).find('td:eq(1)').text();
+          var result = {};
+          result['assessment_id'] = assessment_id;
+          result['student_id'] =id;
+          result['score'] = score;
+          if(table.column(5).visible()){
+            if(!(isNaN(score)) && checker.find('input:checkbox').is(':checked')){
+              lines.push(result);
+            }
+          }
+          else{
+            if(!(isNaN(score)) && !(score.length==0)){
+              lines.push(result);
+            }
           }
         });
 
@@ -247,6 +256,7 @@
                    swal('Tress',response.msg,'success');
                  },
                  error: function(response){
+                   table.column('selection:name').visible(false);
                    swal('Tress',errorMessage(response),'error');
                  }
         });
@@ -318,10 +328,29 @@
            processing: true,
            //serverSide: true,
            pageLength: 20,
+           initComplete:function(settings,json){
+
+               table.cells('.my_score').every(function(){
+                 $(this.node()).attr('contenteditable', 'true');
+                 //$(this.node()).css("background-color", "#C0C0C0");
+               });
+              // isNew = false;
+
+           },
            ajax: url,
            dom: "Bfrtip",
-           buttons: [{extend:'excel',
-           title: $('#subject').val()+" Marks Schedule "+class_id +"\n"+
+           buttons: [
+             {extend:'print',
+             title: $('#subject').val()+" Marks Schedule "+class_id.toUpperCase() +"\n"+
+                    "Date: "+$('#date').val() + "  Title: "+$('#title').val(),
+             exportOptions: {
+                  columns: ':visible',
+                  modifier: {
+                    page: 'all',
+                    search: 'none'
+                  }}},
+             {extend:'excel',
+           title: $('#subject').val()+" Marks Schedule "+class_id.toUpperCase() +"\n"+
                   "Date: "+$('#date').val() + "  Title: "+$('#title').val(),
            exportOptions: {
                 columns: ':visible',
@@ -330,7 +359,7 @@
                   search: 'none'
                 }}},
                 {extend:'pdf',
-                title:$('#subject').val()+" Marks Schedule "+class_id +"\n"+
+                title:$('#subject').val()+" Marks Schedule "+class_id.toUpperCase() +"\n"+
                       "Date: "+$('#date').val() + "  Title: "+$('#title').val(),
                 exportOptions: {
                      columns: ':visible',

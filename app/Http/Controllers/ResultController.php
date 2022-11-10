@@ -20,18 +20,30 @@ class ResultController extends Controller
   }
 
   public function viewAssessment(Request $request){
-    $validate =$request->validate(['group'=>'required']);
-    $id = $request->input('id');
-    if(!empty($request->input('group'))){
-      $class_group = strtoupper($request->input('group'));
+    //$validate =$request->validate(['group'=>'required']);
+    $validate = Validator::make($request->all(),
+    [
+      'group'=>[
+        'bail',
+        'required',
+        'exists:class_groups,id'
+        ],
+      'id'=>[
+        'bail',
+        'required',
+        'exists:assessments,id'
+      ]
+    ],
+    $messages = [
+      'id.required' =>'Assessment code is required'
+    ]
+    )->validate();
 
+    $id = $request->input('id');
+      $class_group = strtoupper($request->input('group'));
       $the_assessment = Assessment::find($id);
-      if(!($the_assessment) || !($the_assessment->class_group->name===$class_group)){
-        return response()->json(['msg'=>'Code Not Found In Class']);
-      }
-    }
-    $assessment = Assessment::where('id','=',$id)->with('subject')->first();
-    return response()->json($assessment);
+      $assessment = Assessment::where('id','=',$id)->with('subject')->first();
+      return response()->json($assessment);
   }
 
   public function getResults(Request $request){
