@@ -74,7 +74,7 @@
     <div class="form-group">
         <label for="exampleInputEmail2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{__('Parent Exam')}}&nbsp;&nbsp;&nbsp;</label>
           <div class="col-xs-1">
-            <input type="email" class="form-control form-control-sm mb-2" name="parent" id="parent">
+            <input type="text" class="form-control form-control-sm mb-2" name="parent" id="parent">
           </div>
         </div>
 
@@ -176,14 +176,9 @@
   });
 
   $('#new').click(function(){
-    $('.yajra-datatable tbody > tr').remove();
-    $('.dataTables_info').empty();
-    $('.dataTables_paginate').empty();
-    $('.dt-buttons').empty();
-    $('.left-pane input').val("");
-    $('.left-pane input').attr('readonly',false);
-    $('#group').focus();
-    isNew = true;
+    table.cells('.my_score').every(function(){
+      $(this.node()).attr('contenteditable', 'true');
+    });
   });
 
   $('#code').focusout(function(){
@@ -202,7 +197,19 @@
             $('#subject').val(response.subject.name);
             $('#title').val(response.title);
             $('#description').val(response.description);
-            $('#category').val(response.category);
+
+            let cat = "";
+            if(response.category==0){
+              cat ="Test";
+            }
+            else if(response.category==1){
+              cat ="Exercise";
+            }
+            else if(response.category==2){
+              cat ="Exam";
+            }
+
+            $('#category').val(cat);
             $('#weight').val(response.perc_weight);
             $('#parent').val(response.parent_id);
             $('#date').val(response.date);
@@ -328,15 +335,6 @@
            processing: true,
            //serverSide: true,
            pageLength: 20,
-           initComplete:function(settings,json){
-
-               table.cells('.my_score').every(function(){
-                 $(this.node()).attr('contenteditable', 'true');
-                 //$(this.node()).css("background-color", "#C0C0C0");
-               });
-              // isNew = false;
-
-           },
            ajax: url,
            dom: "Bfrtip",
            buttons: [

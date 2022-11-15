@@ -15,9 +15,9 @@
   </div>
 
   <div class="form-group">
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" style="color:blue" onClick="adjust()" data-toggle="modal" data-target="#AssModal">{{__('Lesson')}}</a>&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" style="color:blue" onClick="adjust()" data-toggle="modal" data-target="#AssModal">{{__('Subject')}}</a>&nbsp;&nbsp;
   <div class="col-xs-1">
-    <input type="text" class="form-control form-control-sm mb-2" name ="lesson" id="lesson">
+    <input type="text" class="form-control form-control-sm mb-2" name ="subject" id="subject">
   </div>
   </div>
 
@@ -32,20 +32,14 @@
 
  <div class="form-inline inner-pane">
   <div class="form-group">
-    <label for="sub">{{__('Subject Code')}}&nbsp;&nbsp;</label>
+    <label for="sub">{{__('Subject Name')}}&nbsp;&nbsp;</label>
 	<div class="col-xs-1">
     <input type="text" class="form-control form-control-sm mb-2" name ="sub" id="sub">
 	</div>
   </div>
-  <div class="form-group">
-    <label for="subject">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{__('Subject')}}&nbsp;&nbsp;</label>
-	<div class="col-xs-1">
-    <input type="text" class="form-control form-control-sm mb-2" name = "subject" id="subject">
-	</div>
-  </div>
 
   <div class="form-group">
-        <label for="description">{{__('Title')}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+        <label for="description">{{__('Attendance')}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
         <div class="col-xs-1">
         <input type="text" class="form-control form-control-sm mb-2" name="description" id="description">
       </div>
@@ -155,33 +149,25 @@
 
   });
 
-  $('#lesson').focusout(function(){
-    var code = $('#lesson').val();
-    var group = $('#group').val();
+  $('#date').focusout(function(){
+    var code = $('#subject').val();
     $.ajax({
         type:'get',
-        url:'{{route("lesson.view")}}',
-        data:{'id':code,'group':group},
+        url:'{{route("subjects.view")}}',
+        data:{'id':code},
         success: function(response){
-          if(!response.msg){
             $('#form_header input').attr("readonly",false);
-            $('#sub').val(response.subject.id);
-            $('#subject').val(response.subject.name);
-            $('#description').val(response.title);
-            $('#date').val(response.date);
-            $('#form_header input').not('#lesson').attr("readonly",true);
+            $('#sub').val(response.name);
+
+            $('#form_header input').not('#subject').attr("readonly",true);
 
             search();
-          }
-          else{
-            $('input').not('#group').val("");
-            $('.register-datatable tbody > tr').remove();
-            //$('#code').focus();
-            swal('Tress',response.msg,'error');
-          }
+
         },
-        error: function(resp){
-          swal('Tress',resp.msg,'error');
+        error: function(response){
+          $('input').not('#group').val("");
+          $('.register-datatable tbody > tr').remove();
+          swal('Tress',errorMessage(response),'error');
         }
     });
   });
@@ -258,21 +244,21 @@
 
  function search(){
    i++;
-   class_id = $('#group').val();
-   var less_code = $('#lesson').val();
-   var url = '{{ route("attendance.list",["group"=>":id","code"=>":lesson"]) }}';
-   url = decodeURIComponent(url);
-   url = url.replace(':lesson',less_code);
-   url = url.replace(':id',class_id);
-
+   id = $('#group').val();
+   var subject_id = $('#subject').val();
+   var date = $('#date').val();
+   var url = '{{ route("attendance.list") }}';
    if(i==1){
             table = $('.register-datatable').DataTable({
             processing: true,
             serverSide: true,
             scrollCollapse: true,
-            paging:         false,
+            paging:   false,
             searching: false,
-            ajax: url,
+            ajax: {
+              url:url,
+              data: {id:id,subject_id:subject_id,date:date}
+            },
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 {data: 'id', name: 'id'},

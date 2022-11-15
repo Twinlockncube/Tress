@@ -46,7 +46,7 @@ class LessonController extends Controller
         if(!($the_lesson)){
           return response()->json(['msg'=>'Lesson Not Found In Class']);
         }
-        else{
+      /*  else{
           foreach ($the_lesson->class_groups as $group) {
             array_push($less_groups,$group->id);
           }
@@ -54,7 +54,7 @@ class LessonController extends Controller
           if(!(in_array($class_group,$less_groups))){
             return response()->json(['msg'=>'Lesson Not Found In Class']);
           }
-        }
+        }*/
       }
       $lesson = Lesson::where('id','=',$id)->with('subject')->first();
       return response()->json($lesson);

@@ -9,6 +9,7 @@ use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Assessment;
 use DataTables;
+use Validator;
 use Illuminate\Routing\Route;
 
 class AssessmentController extends Controller
@@ -65,11 +66,73 @@ class AssessmentController extends Controller
     }
   }
 
+  public function validator($request){
+    $validate = Validator::make($request->all(),
+    [
+      'sub' => [
+          'bail',
+          'required',
+          'exists:subjects,id'
+      ],
+      'title' => [
+         'bail',
+         'required',
+      ],
+      'description' => [],
+      'group' => [
+        'bail',
+        'required',
+        'exists:class_groups,id'
+      ],
+      'category' => [
+        'bail',
+        'required',
+      ],
+      'total' => [
+        'bail',
+        'required',
+      ],
+      'weight' => [
+        function($attribute, $value, $fail) use ($request){
+          if($request->get('parent')){
+            if(!($value)){
+              $fail('Assessment weight is required');
+            }
+          }
+        }
+      ],
+      'parent' => [
+        function($attribute, $value, $fail) use ($request){
+          $parent = Assessment::where('id','=',$value)->withSum('children','perc_weight')->first();
+          if($value){
+            if($parent->parent_id){
+              $fail('A child assessment cannot be a parent');
+            }
+            if($parent->children_sum_perc_weight+$request->get('weight')>100){
+              $fail('Total percentage weight cannot exceed 100');
+            }
+            if(!($parent->class_group_id==$request->get('group'))){
+              $fail('Parent and child must belong to same class group');
+            }
+            if(!($parent->subject_id==$request->get('sub'))){
+              $fail('Parent and child must belong to same subject');
+            }
+           }
+        }
+      ],
+      'date' => [
+        'required',
+
+      ],
+    ])->validate();
+    return $validate;
+  }
+
   public function create(Request $request){
       if($request->ajax()){
-      $validate = $request->validate([
-        'title'=>'required',
-      ]);
+
+      $validate = $this->validator($request);
+
       $subject_id =$request->get('sub');
       $subject = Subject::where('id','=',$subject_id)->first();
       $id =$this->assessmentNumber($subject);
@@ -104,4 +167,45 @@ class AssessmentController extends Controller
       return response()->json($assessment);
     }
   }
+
+  public function update(Request $request){
+    $validate = $this->validator($request);
+
+    $subject_id =$request->get('sub');
+    $subject = Subject::where('id','=',$subject_id)->first();
+    $id =$request->get('id');
+    $title =$request->get('title');
+    $description =$request->get('description');
+    $class_group_id =$request->get('group');
+    $user_id =Auth::user()->id;
+    $category =$request->get('category');
+    $total =$request->get('total');
+    $perc_weight =$request->get('weight');
+    $parent_id =$request->get('parent');
+    $date =$request->get('date');
+
+    $assessment = Assessment::find($id);
+    $assessment->update([
+      'id' => $id,
+      'title' => $title,
+      'description' => $description,
+      'subject_id' => $subject_id,
+      'class_group_id' => $class_group_id,
+      'user_id' => $user_id,
+      'category' => $category,
+      'total' =>$total,
+      'perc_weight' => $perc_weight,
+      'parent_id' => $parent_id,
+      'date' => $date,
+    ]);
+
+    return response()->json($assessment);
+  }
+
+  public function delete(Request $request){
+      $id = $request->input('id');
+      $assessment = Assessment::where('id','=',$id)->first();
+      $assessment->delete();
+      return response()->json(array('message'=>"Assessment Deleted Successfully"));
+ }
 }

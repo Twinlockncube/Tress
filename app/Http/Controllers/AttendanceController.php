@@ -20,12 +20,14 @@ class AttendanceController extends Controller
 
  public function getAttendances(Request $request){
   if ($request->ajax()) {
-      //$class_group = Route::current()->parameter('class_group_id');
-      $class_group = $request->route('group');
-      $lesson_id = $request->route('code');
+      $class_group = $request->get('id');
+      $subject_id = $request->get('subject_id');
+      $date = $request->get('date');
+
 
         $less_attendances = DB::table('attendances')
-                          ->where('lesson_id','=',$lesson_id);
+                          ->where('subject_id','=',$subject_id)
+                          ->where('date','=',$date);
 
          $data = DB::table('students')
                  ->leftJoinSub($less_attendances, 'less_attendances',

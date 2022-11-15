@@ -26,17 +26,26 @@ use Carbon\Carbon;
 class TestController extends Controller
 {
   public function theTest(Request $request){
-   //$last_issue = Copy::find('ETF01')->last_issue()->with('students')->get();
-  // $last_issue = $last_issue[0];
 
-   //$copy = Copy::where('id','=','ETF01')->with('book')->get();
-   //$serial =  shell_exec('wmic DISKDRIVE GET SerialNumber 2>&1');
-   $the_string ='CP0015';
-   $out_put = preg_replace('/[^0-9]/','',$the_string);
-   $out_put = ltrim($out_put,'0');
-   return $out_put;
+    $class_group = '1A1';
+    $subject_id = 'MAT101';
+    $date = '2022-11-15';
 
-   }
-         //}
+      $less_attendances = DB::table('attendances')
+                        ->where('subject_id','=',$subject_id)
+                        ->where('date','=',$date);
+
+       $data = DB::table('students')
+               ->leftJoinSub($less_attendances, 'less_attendances',
+                     function($join){
+                         $join->on('students.id','=','less_attendances.student_id');
+                     })
+               ->where('students.class_group_id','=',$class_group)
+               ->select('students.id','students.name','students.last_name','less_attendances.punctual')
+               ->get();
+        return $data;
+
+       }
+
 
 }

@@ -53,6 +53,10 @@ $(document).ready(function(){
 
 function errorMessage(response){
       let error_message ="";
+      if(response.status==401){
+        error_message = "Session Expired";
+        return error_message;
+      }
       $.each(response.responseJSON.errors,function(){
         if(error_message.length>0){
           error_message = error_message + "\n"+this;

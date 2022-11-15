@@ -52,6 +52,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('students/list', [App\Http\Controllers\StudentController::class, 'getStudents'])->name('students.list');
     //Subject Routes
     Route::get('subject/existence', [App\Http\Controllers\SubjectController::class, 'existence'])->name('subjects.existence');
+    Route::get('subject/view', [App\Http\Controllers\SubjectController::class, 'view'])->name('subjects.view');
 
 
     //Assessment Routes
@@ -61,7 +62,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('assessment/create', [App\Http\Controllers\AssessmentController::class, 'create'])->name('assessment.create');
     Route::get('assessment/view', [App\Http\Controllers\AssessmentController::class, 'viewAssessment'])->name('assessment.view');
     Route::get('assessment/val_total', [App\Http\Controllers\AssessmentController::class, 'validateTotal'])->name('assessment.val_total');
-
+    Route::post('assessment/update_assessment', [App\Http\Controllers\AssessmentController::class, 'update'])->name('update_assessment');
+    Route::delete('assessment/delete', [App\Http\Controllers\AssessmentController::class, 'delete'])->name('delete_assessment');
 
     //Results Routes
     Route::get('result/list/{group}/{code}', [App\Http\Controllers\ResultController::class, 'getResults'])->name('result.list');
@@ -127,7 +129,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('delete_class_lesson', [App\Http\Controllers\ClassLessonController::class, 'delete'])->name('delete_class_lesson');
     //Attendance Routes
     Route::get('attendance/create', [App\Http\Controllers\AttendanceController::class, 'index'])->name('attendance.create');
-    Route::get('attendance/list/{group?}/{code?}', [App\Http\Controllers\AttendanceController::class, 'getAttendances'])->name('attendance.list');
+    Route::get('attendance/list', [App\Http\Controllers\AttendanceController::class, 'getAttendances'])->name('attendance.list');
     Route::post('attendance/capture', [App\Http\Controllers\AttendanceController::class, 'capture'])->name('attendance.capture');
 
 

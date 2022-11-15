@@ -86,20 +86,6 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="lesson" class="col-md-4 col-form-label text-md-right"><a href="#">{{ __('Lesson') }}</a></label>
-
-                            <div class="col-md-6">
-                                <input id="lesson" type="text" class="form-control form-control-sm input-sm @error('lesson') is-invalid @enderror" name="lesson" value="{{ old('lesson') }}" required autocomplete="lesson" autofocus>
-
-                                @error('lesson')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
                             <label for="subject" class="col-md-4 col-form-label text-md-right">{{ __('Subject') }}</label>
 
                             <div class="col-md-6">
@@ -117,11 +103,11 @@
                             <label for="category" class="col-md-4 col-form-label text-md-right">{{ __('Category') }}</label>
 
                             <div class="col-md-6">
-                              <select id="status" class="form-control form-control-sm">
+                              <select id="category" name="category" class="form-control form-control-sm">
                                 <option value="n">Category</option>
                                 <option value="0">Test</option>
                                 <option value="1">Exercise</option>
-                                <option value="1">Exam</option>
+                                <option value="2">Exam</option>
                               </select>
                             </div>
                         </div>
@@ -220,30 +206,31 @@
                             swal('Tress','Assessment Created Successfully','success');
                             $('.yajra-datatable').DataTable().ajax.reload();
                           },
-                          error: function(resp){
-                            swal('Tress',resp.responseJSON.message,'error');
+                          error: function(response){
+                            console.log(response);
+                            swal('Tress',errorMessage(response),'error');
                           }
                       });
                     }
 
-                    function updateStudent(){
+                    function updateAssessment(){
                       $.ajax({
                           type:'post',
-                          url:"/update_student",
+                          url:"{{route('update_assessment')}}",
                           data:$('form').serialize(),
                           success: function(response){
                             $('.yajra-datatable').DataTable().ajax.reload();
-                            swal('Tress','Student Edited Successfully','success');
+                            swal('Tress','Assessment Edited Successfully','success');
                           },
-                          error: function(resp){
-                            swal('Tress',resp.msg,'error');
+                          error: function(response){
+                            swal('Tress',errorMessage(response),'error');
                           }
                       });
                     }
 
-                    function deleteStudent(event){
+                    function deleteAssessment(event){
                       event.preventDefault();
-                      var id = $(event.target).parent().siblings(":first").next().html();
+                      var id = $('#id').val();
                       swal({
                             title: "Are you sure?",
                             text: "Once deleted, you will not be able to recover the record",
@@ -254,20 +241,15 @@
                           .then((willDelete) => {
                             if (willDelete) {
                               $.ajax({
-                                type: 'get',
-                                url: "/delete_student",
-                                data:{id:id},
+                                type: 'delete',
+                                url: "{{route('delete_assessment')}}",
+                                data:{"_token":"{{csrf_token()}}",id:id},
                                 success: function(response){
                                   $('.yajra-datatable').DataTable().ajax.reload();
-                                  swal('Tress',response.msg,'success');
+                                  swal('Tress',response.message,'success');
                                 },
                                 error: function(response){
-                                  if(response.status == 403){
-                                    swal('Tress',"Error: "+403+ ". Check permissions ",'alert');
-                                  }
-                                  else{
-                                    alert("Unspecified Error!");
-                                  }
+                                    swal('Tress',errorMessage(response),'error');
                                 }
                               });
                             }
@@ -285,14 +267,12 @@
                             var weight = $('#weight').val();
                             var sum_sofar = response.children_sum_perc_weight;
                             if(weight+sum_sofar>100){
-                              alert('Weight limit exceeded');
-                            }
-                            else{
-                              alert('Good weight');
+                              $('#weight').val();
+                              swal('Tress','Weight limit exceeded','error');
                             }
                           },
-                          error: function(resp){
-                            alert(resp.msg);
+                          error: function(response){
+                            swal('Tress',errorMessage(response),'error');
                           }
                       });
                     }
@@ -326,7 +306,7 @@
                           url:'{{route("assessment.view")}}',
                           data:{id:id},
                           success: function(response){
-                            //console.log(response);
+
                             $('#id').val(response.id);
                             $('#title').val(response.title);
                             $('#description').val(response.description);
@@ -335,14 +315,14 @@
                             $('#category').val(response.category);
                             $('#total').val(response.total);
                             $('#weight').val(response.perc_weight);
-                            $('#parent').val(response.parent);
+                            $('#parent').val(response.parent_id);
                             $('#date').val(response.date);
 
                             $('form input').attr("readonly",true);
                             $('#submit').attr("disabled",true);
                           },
-                          error: function(resp){
-                            alert(resp.msg);
+                          error: function(response){
+                            swal('Tress',errorMessage(respose),'error');
                           }
                       });
                       return false;
@@ -383,7 +363,8 @@
                             event.preventDefault();
                             new_entry = true;
                             $('#reg_form input').attr("readonly",false);
-                            $('#reg_form')[0].reset();
+                            //$('#reg_form')[0].reset();
+                            $('#id').val("");
                             $('#last_name').focus();
                             $('#submit').attr("disabled",false);
                         });
@@ -411,7 +392,7 @@
                                  {data: 'date', name: 'date'},
                              ]
                          });
-                        // console.log(table.buttons().container());
+
                        });
 
                     });

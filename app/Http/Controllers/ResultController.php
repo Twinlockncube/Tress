@@ -54,14 +54,20 @@ class ResultController extends Controller
 
        $assessments = $the_assessment->children()->select('id')->get();
        if(count($assessments)>0){
-         $data = DB::table('students')
-                  ->leftJoin('results', 'students.id', '=','results.student_id')
-                  ->leftJoin('assessments', 'results.assessment_id', '=', 'assessments.id')
-                  ->where('students.class_group_id','=',$class_group)
-                  ->select(DB::raw('students.id,students.name,students.last_name,sum(results.score*assessments.perc_weight/assessments.total) AS score'))
-                  ->groupBy('students.id','students.name','students.last_name')
-                  ->orderBy('score','DESC')
-                  ->get();
+         $results = DB::table('results')
+                        ->whereIn('assessment_id',$assessments);
+
+                    $data = DB::table('students')
+                            ->leftJoinSub($results, 'results',
+                                  function($join){
+                                      $join->on('students.id','=','results.student_id');
+                                  })
+                             ->leftJoin('assessments', 'results.assessment_id', '=', 'assessments.id')
+                             ->where('students.class_group_id','=',$class_group)
+                             ->select(DB::raw('students.id,students.name,students.last_name,sum(results.score*assessments.perc_weight/assessments.total) AS score'))
+                             ->groupBy('students.id','students.name','students.last_name')
+                             ->orderBy('score','DESC')
+                             ->get();
 
        }
        else{
@@ -75,7 +81,7 @@ class ResultController extends Controller
                         })
                   ->where('students.class_group_id','=',$class_group)
                   ->select('students.id','students.name','students.last_name','ass_results.score')
-                  ->orderBy('score','DESC')
+                  ->orderBy('ass_results.score','DESC')
                   ->get();
        }
 

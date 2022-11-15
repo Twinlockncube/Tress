@@ -129,7 +129,7 @@ class IssueController extends Controller
         $id = $request->input('id');
         $issue = Issue::where('id','=',$id)->first();
         $issue->delete();
-        return response()->json(array('error'=>"Issue Deleted Successfully"));
+        return response()->json(array('message'=>"Issue Deleted Successfully"));
    }
 
    public function update(Request $request){

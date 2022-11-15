@@ -11,4 +11,10 @@ class SubjectController extends Controller
        $sub = Subject::find($sub_id)===null? null:Subject::where('id','=',$sub_id)->first();
        return response()->json($sub);
   }
+
+  public function view(Request $request){
+    $id = $request->get('id');
+    $subject = Subject::find($id);
+    return response()->json($subject);
+  }
 }
