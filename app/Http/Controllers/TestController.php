@@ -43,7 +43,11 @@ class TestController extends Controller
                ->where('students.class_group_id','=',$class_group)
                ->select('students.id','students.name','students.last_name','less_attendances.punctual')
                ->get();
-        return $data;
+
+               $data1 = DB::table('class_group_subject')
+                       ->leftJoin('subjects','class_group_subject.subject_id','subjects.id')
+                       ->get();
+        return $data1;
 
        }
 

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use DB;
 use Auth;
 use DataTables;
-use App\Models\Lesson;
+use App\Models\Subject;
 use App\Models\Attendance;
 use Illuminate\Routing\Route;
 
@@ -48,28 +48,28 @@ class AttendanceController extends Controller
       }
 
       public function capture(Request $request){
-
-        $lesson_id = $request->input('lesson_id');
-        $the_lesson=Lesson::find($lesson_id);
-        if($the_lesson){
+        $date = $request->get('date');
+        $subject_id = $request->input('subject_id');
+        $the_subject=Subject::find($subject_id);
+        if($the_subject){
                 $lines = json_decode($request->input('lines'));
 
               //  $attendances = array();
                 foreach ($lines as $line) {
                   $arr_line = json_decode(json_encode($line));
                   $attendance = Attendance::firstOrNew([
-                    'lesson_id' => $arr_line->lesson_id,
+                    'subject_id' => $arr_line->subject_id,
                     'student_id' => $arr_line->student_id,
                   ]);
                   $attendance->punctual = $arr_line->punctual;
+                  $attendance->date = $date;
                   $attendance->user_id = Auth::user()->id;
                   $attendance->save();
 
                 }
-         return response()->json(['msg'=>'Data Captured Successfully']);
-      }
 
-        return response()->json(['msg'=>'Unable to update']);
+      }
+        return response()->json(['msg'=>'Register Marked Successfully']);
       }
 
 }

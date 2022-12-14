@@ -120,6 +120,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('lesson/reg_lesson', [App\Http\Controllers\LessonController::class, 'create'])->name('reg_lesson');
     Route::get('lesson/delete_lesson', [App\Http\Controllers\LessonController::class, 'delete'])->name('delete_lesson');
 
+    //Class_Group_Subject
+    Route::get('class_group_subject/index', [App\Http\Controllers\ClassGroupSubjectController::class, 'index'])->name('class_group_subject.index');
+
     //Class_Lesson Routes
     Route::get('class_lesson/index', [App\Http\Controllers\ClassLessonController::class, 'index'])->name('class_lesson.index');
     Route::get('class_lesson/list', [App\Http\Controllers\ClassLessonController::class, 'showClassLesson'])->name('class_lesson.list');

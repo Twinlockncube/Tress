@@ -154,7 +154,7 @@ function MM_validateForm() { //v4.0
                 <div id="subglobal3" class="subglobalNav"> <a href="{{route('payment.index')}}">Payments</a> | <a href="{{route('payment.batch_create')}}">Group/Individual Payments</a> | <a href="#">Balance Sheet</a> | <a href="#">Statements</a> </div>
                 <div id="subglobal4" class="subglobalNav"> <a href="{{ route('regist') }}">Profile</a> | <a href="{{route('guardian')}}">Guardian</a> | <a href="#">Register</a> | <a href="{{route('assessment.index')}}">Assessment</a> | <a href="{{route('result.capture')}}">Result</a> | <a href="{{route('attendance.create')}}">Attendance</a> | <a href="#">Discipline</a> </div>
                 <div id="subglobal5" class="subglobalNav"> <a href="{{route('book.index')}}">Books</a> | <a href="{{route('copies.index')}}">Copies</a> | <a href="{{route('issues.index')}}">Issues</a> | <a href="{{route('receipts.index')}}">Receipts</a> </div>
-              	  <div id="subglobal6" class="subglobalNav"> <a href="{{ route('lesson.index') }}">Plan</a> | <a href="{{route('class_lesson.index')}}">Classes</a> </div>
+              	  <div id="subglobal6" class="subglobalNav"> <a href="{{ route('lesson.index') }}">Plan</a> | <a href="{{route('class_lesson.index')}}">Classes</a> | <a href="{{route('class_group_subject.index')}}">Class Subjects</a> </div>
                 <div id="subglobal7" class="subglobalNav"> <a href="#">subglobal7 link</a> | <a href="#">subglobal7 link</a> | <a href="#">subglobal7 link</a> | <a href="#">Form1</a> | <a href="#">Form2</a> | <a href="#">Form3</a> | <a href="#">Form4</a> </div>
                 <div id="subglobal8" class="subglobalNav"> <a href="#">subglobal8 link</a> | <a href="#">subglobal8 link</a> | <a href="#">subglobal8 link</a> | <a href="#">subglobal8 link</a> | <a href="#">subglobal8 link</a> | <a href="#">subglobal8 link</a> | <a href="#">subglobal8 link</a> </div>
               </div>
@@ -195,7 +195,7 @@ function MM_validateForm() { //v4.0
                   // -->
                   </script>
             </div>
-        <div id="siteInfo">&copy;2021 Tress College </div>
+        <div id="siteInfo">&copy;2022 Tress College </div>
   </div>
 </body>
 </html>

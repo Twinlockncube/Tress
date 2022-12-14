@@ -182,7 +182,8 @@
      $('#submit').click(function(){
 
         var lines = new Array();
-        var lesson_id = $('#lesson').val();
+        var subject_id = $('#subject').val();
+        var mark_date = $('#date').val();
         $('.register-datatable tbody tr').each(function(){
           var checker = $(this).find('td:eq(5)').find('input:checkbox').is(':checked');
           var punctual =0;
@@ -193,7 +194,7 @@
           if(present){
                 var id = $(this).find('td:eq(1)').text();
                 var attendance = {};
-                attendance['lesson_id'] = lesson_id;
+                attendance['subject_id'] = subject_id;
                 attendance['student_id'] =id;
                 attendance['punctual'] = punctual;
                 lines.push(attendance);
@@ -204,13 +205,12 @@
          $.ajax({
                  type:'post',
                  url:url,
-                 data:{"_token": "{{ csrf_token() }}", "lines":JSON.stringify(lines),"lesson_id":lesson_id},
+                 data:{"_token": "{{ csrf_token() }}", "lines":JSON.stringify(lines),"subject_id":subject_id,"date":mark_date},
                  success: function(response){
-                   //table.ajax.url(url).load();
-                   alert(response.msg);
+                   swal('Tress',response.msg,'success');
                  },
-                 error: function(resp){
-                   alert(resp.msg);
+                 error: function(response){
+                   swal('Tress',errorMessage(response),'error');
                  }
         });
 
@@ -259,6 +259,10 @@
               url:url,
               data: {id:id,subject_id:subject_id,date:date}
             },
+            dom: "Bftip",
+            buttons: [
+              'excel','pdf','print'
+            ],
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 {data: 'id', name: 'id'},
